@@ -506,7 +506,7 @@ export function SlideRenderer({ slide }) {
                   ["padrão visual da aplicação", false],
                 ].map(([label, checked]) => (
                   <label className="flex items-center gap-3 rounded-2xl bg-[var(--surface)] px-4 py-3" key={label}>
-                    <Checkbox checked={checked} />
+                    <Checkbox checked={checked} disabled />
                     <span>{label}</span>
                   </label>
                 ))}
