@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, MoonStar, Printer, SunMedium } from "lucide-react";
 import { Navigate, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
 import { Toaster } from "sonner";
@@ -20,6 +20,7 @@ function SlidePage() {
   const slideIndex = slides.findIndex((slide) => slide.id === numericId);
   const currentSlide = slideIndex >= 0 ? slides[slideIndex] : slides[0];
   const progress = ((currentSlide.id - 1) / (slides.length - 1)) * 100;
+  const [theme, setTheme] = useState(() => document.documentElement.dataset.theme || "light");
 
   useEffect(() => {
     if (slideIndex === -1) {
@@ -60,9 +61,10 @@ function SlidePage() {
 
   function toggleTheme() {
     const root = document.documentElement;
-    const next = root.dataset.theme === "dark" ? "light" : "dark";
+    const next = theme === "dark" ? "light" : "dark";
     root.dataset.theme = next;
     localStorage.setItem("presentation-theme", next);
+    setTheme(next);
   }
 
   return (
@@ -128,7 +130,7 @@ function SlidePage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Button onClick={toggleTheme} size="icon" variant="outline">
-                    {document.documentElement.dataset.theme === "dark" ? <SunMedium className="size-4" /> : <MoonStar className="size-4" />}
+                    {theme === "dark" ? <SunMedium className="size-4" /> : <MoonStar className="size-4" />}
                   </Button>
                   <Button onClick={() => window.print()} size="icon" variant="outline">
                     <Printer className="size-4" />
