@@ -1,21 +1,28 @@
-# Apresentação Shadcn/UI
+# Apresentacao Shadcn/UI
 
-Apresentação feita em HTML, CSS e JavaScript puro.
+Aplicacao React com rotas por slide e componentes em estilo Shadcn UI.
 
-## Como usar
+## Como rodar
 
-1. Abra `index.html` no navegador.
-2. Use as setas do teclado para navegar.
-3. Use o botão de tema para alternar claro/escuro.
-4. Use o botão de impressão para salvar em PDF.
+```bash
+npm install
+npm start
+```
+
+A aplicacao sobe em `http://127.0.0.1:3000`.
+
+## Estrutura
+
+- `src/App.jsx`: shell da apresentacao e rotas.
+- `src/components/presentation/SlideRenderer.jsx`: conteudo dos 13 slides.
+- `src/components/ui/`: componentes no padrao Shadcn.
+- `src/data/slides.js`: metadados dos slides.
 
 ## Funcionalidades
 
-- Navegação por teclado.
-- Menu lateral de slides.
+- Navegacao por teclado entre slides.
 - Barra de progresso.
-- Botões para copiar comandos e exemplos de código.
-- Demo funcional de login.
-- Toast interativo.
-- Playground simples de variantes.
-- Prompt copiável para uso com IA.
+- Sidebar com navegacao por rota.
+- Tema claro e escuro.
+- Toasts, playground de variantes e demo de login.
+- Prompt copiavel para o slide de IA.
