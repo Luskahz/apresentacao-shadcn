@@ -103,18 +103,6 @@ function SlidePage() {
               ))}
             </div>
           </ScrollArea>
-          <div className="border-t border-[var(--border)] p-4">
-            <div className="grid gap-3">
-              <Card className="bg-[var(--surface-2)] p-4 shadow-none">
-                <div className="text-sm font-semibold">Integrante 1</div>
-                <div className="text-sm text-[var(--muted)]">Slides 1 a 6</div>
-              </Card>
-              <Card className="bg-[var(--surface-2)] p-4 shadow-none">
-                <div className="text-sm font-semibold">Integrante 2</div>
-                <div className="text-sm text-[var(--muted)]">Slides 7 a 13</div>
-              </Card>
-            </div>
-          </div>
         </aside>
 
         <main className="flex min-h-screen flex-col">
