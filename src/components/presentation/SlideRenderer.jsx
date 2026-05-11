@@ -43,14 +43,14 @@ const techStack = [
   {
     name: "CVA",
     role: "variantes",
-    stage: 6,
+    stage: 5,
     description: "Organiza variações de estilo, como default, outline e destructive.",
     example: 'variant="outline"',
   },
   {
     name: "CLI do shadcn",
     role: "instalação",
-    stage: 7,
+    stage: 6,
     description: "Adiciona os componentes como arquivos dentro do projeto.",
     example: "npx shadcn@latest add button",
   },
@@ -519,7 +519,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                   </Card>
                 }
                 className="h-[320px]"
-                flipped={case5VisibleStages >= 5}
+                flipped={case5VisibleStages >= 7}
                 front={
                   <Card className="grid h-full place-items-center bg-[var(--surface-2)] p-5 text-center shadow-none">
                     <div className="space-y-3">
@@ -535,7 +535,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
               <FlipCard
                 back={<CodeBlock className="h-full" code={stackCompositionSnippet} />}
                 className="h-[320px]"
-                flipped={case5VisibleStages >= 5}
+                flipped={case5VisibleStages >= 7}
                 front={
                   <Card className="grid h-full place-items-center border-white/10 bg-[#09120f] p-5 text-center text-emerald-50 shadow-none">
                     <div className="space-y-3">
