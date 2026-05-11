@@ -6,18 +6,57 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { FlipCard } from "@/components/ui/flip-card";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
 const techStack = [
-  ["React", "estrutura dos componentes"],
-  ["Tailwind CSS", "estilo por classes utilitárias"],
-  ["Radix UI", "acessibilidade e comportamento"],
-  ["Lucide React", "ícones consistentes"],
-  ["CVA", "variantes de componentes"],
-  ["CLI do Shadcn", "instalação e organização"],
+  {
+    name: "React",
+    role: "estrutura",
+    stage: 1,
+    description: "Os componentes são escritos como componentes React comuns.",
+    example: "<Button />",
+  },
+  {
+    name: "Tailwind CSS",
+    role: "estilo",
+    stage: 2,
+    description: "Define o visual usando classes utilitárias direto nos componentes.",
+    example: "rounded-md px-4 py-2",
+  },
+  {
+    name: "Radix UI",
+    role: "comportamento",
+    stage: 3,
+    description: "Base acessível para componentes interativos como Dialog, Select e Dropdown.",
+    example: "Dialog, Select, Popover",
+  },
+  {
+    name: "Lucide React",
+    role: "ícones",
+    stage: 4,
+    description: "Fornece ícones leves e consistentes para usar nos componentes.",
+    example: "<Copy />",
+  },
+  {
+    name: "CVA",
+    role: "variantes",
+    stage: 6,
+    description: "Organiza variações de estilo, como default, outline e destructive.",
+    example: 'variant="outline"',
+  },
+  {
+    name: "CLI do shadcn",
+    role: "instalação",
+    stage: 7,
+    description: "Adiciona os componentes como arquivos dentro do projeto.",
+    example: "npx shadcn@latest add button",
+  },
 ];
+
+const techRows = [techStack.slice(0, 3), techStack.slice(3, 6)];
 
 const mainComponents = ["Button", "Input", "Card", "Dialog", "Table", "Select", "Dropdown", "Tabs", "Form", "Toast / Sonner"];
 
@@ -55,6 +94,24 @@ const shadcnBenefits = [
   "padrão visual",
 ];
 
+const stackCompositionSteps = [
+  "React monta o componente.",
+  "Lucide entra com os ícones da interface.",
+  "Radix cuida do comportamento e da acessibilidade.",
+  "Tailwind + CVA organizam o visual e as variantes.",
+  "A CLI copia o componente para dentro do projeto.",
+];
+
+const stackCompositionSnippet = `// Exemplo de uso no React
+<Button variant="destructive" className="gap-2">
+  <Copy className="size-4" />
+  Copiar
+</Button>
+
+// O visual vem das variantes
+// A estrutura continua sendo React
+// O código fica em components/ui/button.jsx`;
+
 
 const promptText =
   "Crie uma tela de dashboard em React usando Shadcn/UI com Card, Button, Table e Dialog. Use Tailwind CSS e organize uma tabela de usuários.";
@@ -81,7 +138,7 @@ export function LoginPage() {
   );
 }`;
 
-function CodeBlock({ code, copyText = code }) {
+function CodeBlock({ className, code, copyText = code }) {
   async function handleCopy() {
     try {
       await navigator.clipboard.writeText(copyText);
@@ -92,7 +149,7 @@ function CodeBlock({ code, copyText = code }) {
   }
 
   return (
-    <div className="relative overflow-hidden rounded-[24px] border border-white/10 bg-[#09120f] shadow-inner">
+    <div className={cn("relative overflow-hidden rounded-[24px] border border-white/10 bg-[#09120f] shadow-inner", className)}>
       <div className="absolute left-4 top-4 flex gap-2">
         <span className="h-2.5 w-2.5 rounded-full bg-rose-300" />
         <span className="h-2.5 w-2.5 rounded-full bg-amber-200" />
@@ -122,42 +179,7 @@ function SlideShell({ slide, children }) {
   );
 }
 
-function Case3FlipCard({ children, coverClassName, isRevealed, title }) {
-  return (
-    <div className="h-[330px] [perspective:1400px]">
-      <div
-        className={cn(
-          "relative h-full transition-transform duration-700 [transform-style:preserve-3d]",
-          isRevealed && "[transform:rotateY(180deg)]",
-        )}
-      >
-        <Card
-          aria-hidden={isRevealed}
-          className={cn(
-            "absolute inset-0 grid place-items-center overflow-hidden p-5 text-center shadow-none [backface-visibility:hidden]",
-            coverClassName,
-          )}
-        >
-          <CardTitle className="text-2xl tracking-[-0.04em] md:text-3xl">
-            {title}
-          </CardTitle>
-        </Card>
-
-        <Card
-          aria-hidden={!isRevealed}
-          className={cn(
-            "absolute inset-0 overflow-hidden shadow-none [backface-visibility:hidden] [transform:rotateY(180deg)]",
-            coverClassName,
-          )}
-        >
-          {children}
-        </Card>
-      </div>
-    </div>
-  );
-}
-
-export function SlideRenderer({ case3VisibleCards = 0, slide }) {
+export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, slide }) {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginMessage, setLoginMessage] = useState("Demo funcional com o fluxo representado em React.");
   const [variant, setVariant] = useState("default");
@@ -265,94 +287,121 @@ export function SlideRenderer({ case3VisibleCards = 0, slide }) {
           </div>
 
           <div className="grid gap-4 lg:grid-cols-[0.9fr_1fr_1fr]">
-            <Case3FlipCard
-              coverClassName="bg-[var(--surface-2)] text-foreground"
-              isRevealed={case3VisibleCards >= 1}
-              title="Fluxo comum"
-            >
-              <CardHeader className="p-5 pb-2">
-                <CardTitle className="text-lg">Fluxo comum</CardTitle>
-                <CardDescription className="text-xs leading-5">
-                  O trabalho repetitivo antes de criar a regra real da tela.
-                </CardDescription>
-              </CardHeader>
+            <FlipCard
+              back={
+                <Card className="h-full overflow-hidden bg-[var(--surface-2)] text-foreground shadow-none">
+                  <CardHeader className="p-5 pb-2">
+                    <CardTitle className="text-lg">Fluxo comum</CardTitle>
+                    <CardDescription className="text-xs leading-5">
+                      O trabalho repetitivo antes de criar a regra real da tela.
+                    </CardDescription>
+                  </CardHeader>
 
-              <CardContent className="space-y-1.5 px-5 pb-4 text-[15px] leading-4">
-                {manualComponentSteps.map((step, index) => (
-                  <div
-                    className="flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5"
-                    key={step}
-                  >
-                    <span className="grid size-4 shrink-0 place-items-center rounded-full bg-emerald-400 text-[10px] font-semibold text-emerald-950">
-                      {index + 1}
-                    </span>
-                    <span>{step}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Case3FlipCard>
+                  <CardContent className="space-y-1.5 px-5 pb-4 text-[15px] leading-4">
+                    {manualComponentSteps.map((step, index) => (
+                      <div
+                        className="flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5"
+                        key={step}
+                      >
+                        <span className="grid size-4 shrink-0 place-items-center rounded-full bg-emerald-400 text-[10px] font-semibold text-emerald-950">
+                          {index + 1}
+                        </span>
+                        <span>{step}</span>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              }
+              className="h-[330px]"
+              flipped={case3VisibleCards >= 1}
+              front={
+                <Card className="grid h-full place-items-center overflow-hidden bg-[var(--surface-2)] p-5 text-center text-foreground shadow-none">
+                  <CardTitle className="text-2xl tracking-[-0.04em] md:text-3xl">
+                    Fluxo comum
+                  </CardTitle>
+                </Card>
+              }
+            />
 
-            <Case3FlipCard
-              coverClassName="bg-rose-300/92 text-rose-950"
-              isRevealed={case3VisibleCards >= 2}
-              title="Sem padronização"
-            >
-              <CardHeader className="p-5 pb-2">
-                <CardTitle className="text-lg">Sem padronização</CardTitle>
-                <CardDescription className="text-xs leading-5 text-rose-950/80">
-                  Cada componente nasce de um jeito.
-                </CardDescription>
-              </CardHeader>
+            <FlipCard
+              back={
+                <Card className="h-full overflow-hidden bg-rose-300/92 text-rose-950 shadow-none">
+                  <CardHeader className="p-5 pb-2">
+                    <CardTitle className="text-lg">Sem padronização</CardTitle>
+                    <CardDescription className="text-xs leading-5 text-rose-950/80">
+                      Cada componente nasce de um jeito.
+                    </CardDescription>
+                  </CardHeader>
 
-              <CardContent className="space-y-2 px-5 pb-5 text-xs leading-5">
-                <div className="rounded-xl bg-rose-950/10 px-3 py-2 font-mono text-xs">
-                  Button ≠ Button ≠ Button
-                </div>
-
-                <div className="grid gap-2">
-                  {noPatternProblems.map((problem) => (
-                    <div className="rounded-xl bg-rose-950/10 px-3 py-2" key={problem}>
-                      {problem}
+                  <CardContent className="space-y-2 px-5 pb-5 text-xs leading-5">
+                    <div className="rounded-xl bg-rose-950/10 px-3 py-2 font-mono text-xs">
+                      Button ≠ Button ≠ Button
                     </div>
-                  ))}
-                </div>
 
-                <p className="pt-1">
-                  A interface funciona, mas fica mais difícil evoluir sem quebrar padrão.
-                </p>
-              </CardContent>
-            </Case3FlipCard>
-
-            <Case3FlipCard
-              coverClassName="bg-emerald-400/90 text-emerald-950"
-              isRevealed={case3VisibleCards >= 3}
-              title="Com shadcn"
-            >
-              <CardHeader className="p-5 pb-2">
-                <CardTitle className="text-lg">Com shadcn/ui</CardTitle>
-                <CardDescription className="text-xs leading-5 text-emerald-950/80">
-                  Você parte de uma base pronta e editável.
-                </CardDescription>
-              </CardHeader>
-
-              <CardContent className="space-y-2 px-5 pb-5 text-xs leading-5">
-                <div className="rounded-xl bg-emerald-950/10 px-3 py-2 font-mono text-xs">
-                  npx shadcn@latest add button
-                </div>
-
-                <div className="grid gap-2">
-                  {shadcnBenefits.map((benefit) => (
-                    <div className="rounded-xl bg-emerald-950/10 px-3 py-2" key={benefit}>
-                      {benefit}
+                    <div className="grid gap-2">
+                      {noPatternProblems.map((problem) => (
+                        <div className="rounded-xl bg-rose-950/10 px-3 py-2" key={problem}>
+                          {problem}
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
 
-                <p className="pt-1 font-semibold">
-                  Menos repetição. Mais padrão. Mais controle.
-                </p>
-              </CardContent>
-            </Case3FlipCard>
+                    <p className="pt-1">
+                      A interface funciona, mas fica mais difícil evoluir sem quebrar padrão.
+                    </p>
+                  </CardContent>
+                </Card>
+              }
+              className="h-[330px]"
+              flipped={case3VisibleCards >= 2}
+              front={
+                <Card className="grid h-full place-items-center overflow-hidden bg-rose-300/92 p-5 text-center text-rose-950 shadow-none">
+                  <CardTitle className="text-2xl tracking-[-0.04em] md:text-3xl">
+                    Sem padronização
+                  </CardTitle>
+                </Card>
+              }
+            />
+
+            <FlipCard
+              back={
+                <Card className="h-full overflow-hidden bg-emerald-400/90 text-emerald-950 shadow-none">
+                  <CardHeader className="p-5 pb-2">
+                    <CardTitle className="text-lg">Com shadcn/ui</CardTitle>
+                    <CardDescription className="text-xs leading-5 text-emerald-950/80">
+                      Você parte de uma base pronta e editável.
+                    </CardDescription>
+                  </CardHeader>
+
+                  <CardContent className="space-y-2 px-5 pb-5 text-xs leading-5">
+                    <div className="rounded-xl bg-emerald-950/10 px-3 py-2 font-mono text-xs">
+                      npx shadcn@latest add button
+                    </div>
+
+                    <div className="grid gap-2">
+                      {shadcnBenefits.map((benefit) => (
+                        <div className="rounded-xl bg-emerald-950/10 px-3 py-2" key={benefit}>
+                          {benefit}
+                        </div>
+                      ))}
+                    </div>
+
+                    <p className="pt-1 font-semibold">
+                      Menos repetição. Mais padrão. Mais controle.
+                    </p>
+                  </CardContent>
+                </Card>
+              }
+              className="h-[330px]"
+              flipped={case3VisibleCards >= 3}
+              front={
+                <Card className="grid h-full place-items-center overflow-hidden bg-emerald-400/90 p-5 text-center text-emerald-950 shadow-none">
+                  <CardTitle className="text-2xl tracking-[-0.04em] md:text-3xl">
+                    Com shadcn
+                  </CardTitle>
+                </Card>
+              }
+            />
           </div>
 
           <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface-2)] p-4 text-sm leading-6 text-[var(--muted)]">
@@ -395,32 +444,115 @@ export function SlideRenderer({ case3VisibleCards = 0, slide }) {
           </div>
         </SlideShell>
       );
-    case 5:
-      return (
-        <SlideShell slide={slide}>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-4xl tracking-[-0.05em] md:text-5xl">Tecnologias usadas</CardTitle>
-              <CardDescription className="text-base md:text-lg">
-                O Shadcn combina estrutura, estilo, acessibilidade e organização em um fluxo de desenvolvimento bem objetivo.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {techStack.map(([name, description]) => (
-                  <Card className="bg-[var(--surface-2)] shadow-none" key={name}>
-                    <CardHeader>
-                      <CardTitle className="text-2xl">{name}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-[15px] leading-7 text-[var(--muted)]">{description}</CardContent>
-                  </Card>
+      case 5:
+  return (
+    <SlideShell slide={slide}>
+      <Card>
+        <CardHeader className="max-w-5xl pb-4">
+          <CardTitle className="text-3xl tracking-[-0.05em] md:text-4xl">
+            Tecnologias usadas
+          </CardTitle>
+
+          <CardDescription className="text-sm md:text-base">
+            O shadcn/ui combina várias ferramentas. Cada uma resolve uma parte da interface:
+            estrutura, estilo, acessibilidade, variantes e instalação.
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent className="space-y-4">
+          <div className="grid gap-4">
+            {techRows.map((row, rowIndex) => (
+              <div className="grid gap-4 lg:grid-cols-3" key={rowIndex}>
+                {row.map((tech) => (
+                  <FlipCard
+                    back={
+                      <Card className="h-full overflow-hidden bg-[var(--surface-2)] shadow-none">
+                        <CardHeader className="p-5 pb-3">
+                          <div className="flex items-center justify-between gap-3">
+                            <CardTitle className="text-xl">{tech.name}</CardTitle>
+                            <Badge variant="muted">{tech.role}</Badge>
+                          </div>
+                        </CardHeader>
+
+                        <CardContent className="space-y-3 px-5 pb-5">
+                          <p className="text-sm leading-6 text-[var(--muted)]">
+                            {tech.description}
+                          </p>
+
+                          <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 font-mono text-xs text-[var(--muted)]">
+                            {tech.example}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    }
+                    className="h-[250px]"
+                    flipped={case5VisibleStages >= tech.stage}
+                    front={
+                      <Card className="grid h-full place-items-center bg-[var(--surface-2)] p-5 text-center shadow-none">
+                        <div className="space-y-3">
+                          <Badge variant="outline">{tech.role}</Badge>
+                          <CardTitle className="text-2xl tracking-[-0.04em]">{tech.name}</CardTitle>
+                        </div>
+                      </Card>
+                    }
+                    key={tech.name}
+                  />
                 ))}
               </div>
-              <CodeBlock code={`<Button variant="destructive">\n  Excluir\n</Button>`} />
-            </CardContent>
-          </Card>
-        </SlideShell>
-      );
+            ))}
+
+            <div className="grid gap-4 lg:grid-cols-2">
+              <FlipCard
+                back={
+                  <Card className="h-full overflow-hidden bg-[var(--surface-2)] shadow-none">
+                    <CardHeader className="p-5 pb-3">
+                      <CardTitle className="text-xl">Como as peças se encaixam</CardTitle>
+                    </CardHeader>
+
+                    <CardContent className="space-y-3 px-5 pb-5 text-sm leading-6 text-[var(--muted)]">
+                      {stackCompositionSteps.map((step) => (
+                        <div className="rounded-xl bg-[var(--surface)] px-4 py-3" key={step}>
+                          {step}
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                }
+                className="h-[320px]"
+                flipped={case5VisibleStages >= 5}
+                front={
+                  <Card className="grid h-full place-items-center bg-[var(--surface-2)] p-5 text-center shadow-none">
+                    <div className="space-y-3">
+                      <Badge variant="outline">Fluxo</Badge>
+                      <CardTitle className="text-2xl tracking-[-0.04em]">
+                        Como as peças se encaixam
+                      </CardTitle>
+                    </div>
+                  </Card>
+                }
+              />
+
+              <FlipCard
+                back={<CodeBlock className="h-full" code={stackCompositionSnippet} />}
+                className="h-[320px]"
+                flipped={case5VisibleStages >= 5}
+                front={
+                  <Card className="grid h-full place-items-center border-white/10 bg-[#09120f] p-5 text-center text-emerald-50 shadow-none">
+                    <div className="space-y-3">
+                      <Badge className="border-white/10 bg-white/8 text-white">Código</Badge>
+                      <CardTitle className="text-2xl tracking-[-0.04em] text-emerald-50">
+                        Exemplo em código
+                      </CardTitle>
+                    </div>
+                  </Card>
+                }
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </SlideShell>
+  );
     case 6:
       return (
         <SlideShell slide={slide}>
