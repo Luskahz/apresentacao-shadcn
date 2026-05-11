@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, MoonStar, Printer, SunMedium } from "lucide-react";
 import { Navigate, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
 import { Toaster } from "sonner";
@@ -12,6 +12,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { slides, totalPresentationTime } from "@/data/slides";
 
+const CASE_3_CARD_COUNT = 3;
+
 function SlidePage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,6 +23,40 @@ function SlidePage() {
   const currentSlide = slideIndex >= 0 ? slides[slideIndex] : slides[0];
   const progress = ((currentSlide.id - 1) / (slides.length - 1)) * 100;
   const [theme, setTheme] = useState(() => document.documentElement.dataset.theme || "light");
+  const [case3VisibleCards, setCase3VisibleCards] = useState(0);
+
+  const goToSlide = useCallback(
+    (targetId, direction = "direct") => {
+      if (targetId === 3) {
+        setCase3VisibleCards(direction === "backward" ? CASE_3_CARD_COUNT : 0);
+      }
+
+      navigate(`/slides/${targetId}`);
+    },
+    [navigate],
+  );
+
+  const goNext = useCallback(() => {
+    if (currentSlide.id === 3 && case3VisibleCards < CASE_3_CARD_COUNT) {
+      setCase3VisibleCards((visibleCards) => Math.min(visibleCards + 1, CASE_3_CARD_COUNT));
+      return;
+    }
+
+    if (currentSlide.id < slides.length) {
+      goToSlide(currentSlide.id + 1, "forward");
+    }
+  }, [case3VisibleCards, currentSlide.id, goToSlide]);
+
+  const goPrevious = useCallback(() => {
+    if (currentSlide.id === 3 && case3VisibleCards > 0) {
+      setCase3VisibleCards((visibleCards) => Math.max(visibleCards - 1, 0));
+      return;
+    }
+
+    if (currentSlide.id > 1) {
+      goToSlide(currentSlide.id - 1, "backward");
+    }
+  }, [case3VisibleCards, currentSlide.id, goToSlide]);
 
   useEffect(() => {
     if (slideIndex === -1) {
@@ -33,31 +69,27 @@ function SlidePage() {
       const tag = document.activeElement?.tagName?.toLowerCase();
       if (tag === "input" || tag === "textarea") return;
 
-      if (["ArrowRight", "PageDown", " "].includes(event.key) && currentSlide.id < slides.length) {
+      if (["ArrowRight", "PageDown", " "].includes(event.key)) {
         event.preventDefault();
-        navigate(`/slides/${currentSlide.id + 1}`);
+        goNext();
       }
 
-      if (["ArrowLeft", "PageUp"].includes(event.key) && currentSlide.id > 1) {
+      if (["ArrowLeft", "PageUp"].includes(event.key)) {
         event.preventDefault();
-        navigate(`/slides/${currentSlide.id - 1}`);
+        goPrevious();
       }
 
-      if (event.key === "Home") navigate("/slides/1");
-      if (event.key === "End") navigate(`/slides/${slides.length}`);
+      if (event.key === "Home") goToSlide(1);
+      if (event.key === "End") goToSlide(slides.length);
     }
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [currentSlide.id, navigate]);
+  }, [goNext, goPrevious, goToSlide]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [location.pathname]);
-
-  function goToSlide(targetId) {
-    navigate(`/slides/${targetId}`);
-  }
 
   function toggleTheme() {
     const root = document.documentElement;
@@ -130,17 +162,17 @@ function SlidePage() {
           </header>
 
           <div className="flex-1 px-4 py-6 md:px-6 lg:px-8">
-            <SlideRenderer slide={currentSlide} />
+            <SlideRenderer case3VisibleCards={case3VisibleCards} slide={currentSlide} />
           </div>
 
           <footer className="border-t border-[var(--border)] bg-[color:var(--background)]/86 backdrop-blur-xl">
             <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-4 md:px-6 lg:px-8">
-              <Button disabled={currentSlide.id === 1} onClick={() => goToSlide(currentSlide.id - 1)} variant="outline">
+              <Button disabled={currentSlide.id === 1} onClick={goPrevious} variant="outline">
                 <ChevronLeft className="size-4" />
                 Anterior
               </Button>
               <div className="hidden text-sm text-[var(--muted)] md:block">{currentSlide.title}</div>
-              <Button disabled={currentSlide.id === slides.length} onClick={() => goToSlide(currentSlide.id + 1)}>
+              <Button disabled={currentSlide.id === slides.length} onClick={goNext}>
                 Próximo
                 <ChevronRight className="size-4" />
               </Button>

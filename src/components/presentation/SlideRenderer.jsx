@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 
 const techStack = [
   ["React", "estrutura dos componentes"],
@@ -19,6 +20,41 @@ const techStack = [
 ];
 
 const mainComponents = ["Button", "Input", "Card", "Dialog", "Table", "Select", "Dropdown", "Tabs", "Form", "Toast / Sonner"];
+
+
+const repeatedInterfaceBlocks = [
+  "Button",
+  "Input",
+  "Card",
+  "Modal",
+  "Table",
+  "Menu",
+  "Form",
+];
+
+const manualComponentSteps = [
+  "criar arquivo",
+  "montar componente",
+  "definir props",
+  "aplicar Tailwind",
+  "exportar",
+  "repetir em outra tela",
+];
+
+const noPatternProblems = [
+  "código duplicado",
+  "visual inconsistente",
+  "manutenção difícil",
+  "comportamento diferente",
+];
+
+const shadcnBenefits = [
+  "base pronta",
+  "código no projeto",
+  "customização livre",
+  "padrão visual",
+];
+
 
 const promptText =
   "Crie uma tela de dashboard em React usando Shadcn/UI com Card, Button, Table e Dialog. Use Tailwind CSS e organize uma tabela de usuários.";
@@ -86,7 +122,42 @@ function SlideShell({ slide, children }) {
   );
 }
 
-export function SlideRenderer({ slide }) {
+function Case3FlipCard({ children, coverClassName, isRevealed, title }) {
+  return (
+    <div className="h-[330px] [perspective:1400px]">
+      <div
+        className={cn(
+          "relative h-full transition-transform duration-700 [transform-style:preserve-3d]",
+          isRevealed && "[transform:rotateY(180deg)]",
+        )}
+      >
+        <Card
+          aria-hidden={isRevealed}
+          className={cn(
+            "absolute inset-0 grid place-items-center overflow-hidden p-5 text-center shadow-none [backface-visibility:hidden]",
+            coverClassName,
+          )}
+        >
+          <CardTitle className="text-2xl tracking-[-0.04em] md:text-3xl">
+            {title}
+          </CardTitle>
+        </Card>
+
+        <Card
+          aria-hidden={!isRevealed}
+          className={cn(
+            "absolute inset-0 overflow-hidden shadow-none [backface-visibility:hidden] [transform:rotateY(180deg)]",
+            coverClassName,
+          )}
+        >
+          {children}
+        </Card>
+      </div>
+    </div>
+  );
+}
+
+export function SlideRenderer({ case3VisibleCards = 0, slide }) {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginMessage, setLoginMessage] = useState("Demo funcional com o fluxo representado em React.");
   const [variant, setVariant] = useState("default");
@@ -169,43 +240,132 @@ export function SlideRenderer({ slide }) {
           </div>
         </SlideShell>
       );
-    case 3:
-      return (
-        <SlideShell slide={slide}>
-          <Card>
-            <CardHeader className="max-w-4xl">
-              <CardTitle className="text-4xl tracking-[-0.05em] md:text-5xl">Problema das interfaces repetitivas</CardTitle>
-              <CardDescription className="text-base md:text-lg">
-                Quase todo sistema reaproveita os mesmos blocos: botão, input, card, modal, tabela, menu e formulário.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-8">
-              <div className="flex flex-wrap gap-3">
-                {["Button", "Input", "Card", "Modal", "Table", "Menu", "Form"].map((item) => (
-                  <Badge key={item} variant="muted">
-                    {item}
-                  </Badge>
+      case 3:
+  return (
+    <SlideShell slide={slide}>
+      <Card>
+        <CardHeader className="max-w-5xl pb-4">
+          <CardTitle className="text-3xl tracking-[-0.05em] md:text-4xl">
+            Problema das interfaces repetitivas
+          </CardTitle>
+
+          <CardDescription className="text-sm md:text-base">
+            Todo sistema repete os mesmos blocos de interface. O problema começa quando
+            cada tela recria esses blocos sem uma base comum.
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent className="space-y-5">
+          <div className="flex flex-wrap gap-2">
+            {repeatedInterfaceBlocks.map((item) => (
+              <Badge key={item} variant="muted">
+                {item}
+              </Badge>
+            ))}
+          </div>
+
+          <div className="grid gap-4 lg:grid-cols-[0.9fr_1fr_1fr]">
+            <Case3FlipCard
+              coverClassName="bg-[var(--surface-2)] text-foreground"
+              isRevealed={case3VisibleCards >= 1}
+              title="Fluxo comum"
+            >
+              <CardHeader className="p-5 pb-2">
+                <CardTitle className="text-lg">Fluxo comum</CardTitle>
+                <CardDescription className="text-xs leading-5">
+                  O trabalho repetitivo antes de criar a regra real da tela.
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent className="space-y-1.5 px-5 pb-4 text-[15px] leading-4">
+                {manualComponentSteps.map((step, index) => (
+                  <div
+                    className="flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5"
+                    key={step}
+                  >
+                    <span className="grid size-4 shrink-0 place-items-center rounded-full bg-emerald-400 text-[10px] font-semibold text-emerald-950">
+                      {index + 1}
+                    </span>
+                    <span>{step}</span>
+                  </div>
                 ))}
-              </div>
-              <div className="grid gap-5 md:grid-cols-2">
-                <Card className="bg-emerald-400/90 text-emerald-950 shadow-none">
-                  <CardHeader>
-                    <CardTitle>Com componentes reutilizáveis</CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-lg leading-7">Mais velocidade, padrão visual consistente e manutenção mais previsível.</CardContent>
-                </Card>
-                <Card className="bg-rose-300/92 text-rose-950 shadow-none">
-                  <CardHeader>
-                    <CardTitle>Sem padronização</CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-lg leading-7">Retrabalho, código duplicado, interfaces desalinhadas e comportamento inconsistente.</CardContent>
-                </Card>
-              </div>
-            </CardContent>
-          </Card>
-        </SlideShell>
-      );
-    case 4:
+              </CardContent>
+            </Case3FlipCard>
+
+            <Case3FlipCard
+              coverClassName="bg-rose-300/92 text-rose-950"
+              isRevealed={case3VisibleCards >= 2}
+              title="Sem padronização"
+            >
+              <CardHeader className="p-5 pb-2">
+                <CardTitle className="text-lg">Sem padronização</CardTitle>
+                <CardDescription className="text-xs leading-5 text-rose-950/80">
+                  Cada componente nasce de um jeito.
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent className="space-y-2 px-5 pb-5 text-xs leading-5">
+                <div className="rounded-xl bg-rose-950/10 px-3 py-2 font-mono text-xs">
+                  Button ≠ Button ≠ Button
+                </div>
+
+                <div className="grid gap-2">
+                  {noPatternProblems.map((problem) => (
+                    <div className="rounded-xl bg-rose-950/10 px-3 py-2" key={problem}>
+                      {problem}
+                    </div>
+                  ))}
+                </div>
+
+                <p className="pt-1">
+                  A interface funciona, mas fica mais difícil evoluir sem quebrar padrão.
+                </p>
+              </CardContent>
+            </Case3FlipCard>
+
+            <Case3FlipCard
+              coverClassName="bg-emerald-400/90 text-emerald-950"
+              isRevealed={case3VisibleCards >= 3}
+              title="Com shadcn"
+            >
+              <CardHeader className="p-5 pb-2">
+                <CardTitle className="text-lg">Com shadcn/ui</CardTitle>
+                <CardDescription className="text-xs leading-5 text-emerald-950/80">
+                  Você parte de uma base pronta e editável.
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent className="space-y-2 px-5 pb-5 text-xs leading-5">
+                <div className="rounded-xl bg-emerald-950/10 px-3 py-2 font-mono text-xs">
+                  npx shadcn@latest add button
+                </div>
+
+                <div className="grid gap-2">
+                  {shadcnBenefits.map((benefit) => (
+                    <div className="rounded-xl bg-emerald-950/10 px-3 py-2" key={benefit}>
+                      {benefit}
+                    </div>
+                  ))}
+                </div>
+
+                <p className="pt-1 font-semibold">
+                  Menos repetição. Mais padrão. Mais controle.
+                </p>
+              </CardContent>
+            </Case3FlipCard>
+          </div>
+
+          <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface-2)] p-4 text-sm leading-6 text-[var(--muted)]">
+            <strong className="text-foreground">Ideia central:</strong>{" "}
+            o shadcn/ui não resolve a regra de negócio. Ele reduz o trabalho repetitivo
+            da interface, entregando uma base visual pronta para o desenvolvedor adaptar.
+          </div>
+        </CardContent>
+      </Card>
+    </SlideShell>
+  );
+  
+      case 4:
       return (
         <SlideShell slide={slide}>
           <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
