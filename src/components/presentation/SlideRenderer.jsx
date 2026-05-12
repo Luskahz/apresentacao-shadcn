@@ -589,7 +589,44 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
           </Card>
         </SlideShell>
       );
-    case 7:
+      case 7:
+      return (
+        <SlideShell slide={slide}>
+          <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+            <div className="grid gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-4xl tracking-[-0.05em] md:text-5xl">Instalação e estrutura</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CodeBlock
+                    code={`npx shadcn@latest init\nnpx shadcn@latest add button\nnpx shadcn@latest add card\nnpx shadcn@latest add input\nnpx shadcn@latest add dialog`}
+                  />
+                </CardContent>
+              </Card>
+              <Card className="bg-[var(--surface-2)] shadow-none">
+                <CardContent className="grid gap-3 p-6 text-sm leading-7 text-[var(--muted)] md:text-base">
+                  <p><strong>components/ui</strong>: componentes do Shadcn</p>
+                  <p><strong>lib/utils.ts</strong>: função auxiliar para classes CSS</p>
+                  <p><strong>components.json</strong>: configuração do Shadcn</p>
+                  <p><strong>CSS global</strong>: tema e variáveis</p>
+                </CardContent>
+              </Card>
+            </div>
+            <Card className="bg-[#09120f] text-emerald-50">
+              <CardHeader>
+                <CardTitle className="text-3xl">Estrutura comum</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <pre className="text-sm leading-8 text-emerald-50 md:text-base">
+                  <code>{`src/\n  components/\n    ui/\n      button.tsx\n      card.tsx\n      input.tsx\n      dialog.tsx\n  lib/\n    utils.ts\ncomponents.json`}</code>
+                </pre>
+              </CardContent>
+            </Card>
+          </div>
+        </SlideShell>
+      );
+    case 8:
       return (
         <SlideShell slide={slide}>
           <Card>
@@ -633,90 +670,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
           </Card>
         </SlideShell>
       );
-    case 8:
-      return (
-        <SlideShell slide={slide}>
-          <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-            <div className="grid gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-4xl tracking-[-0.05em] md:text-5xl">Instalação e estrutura</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CodeBlock
-                    code={`npx shadcn@latest init\nnpx shadcn@latest add button\nnpx shadcn@latest add card\nnpx shadcn@latest add input\nnpx shadcn@latest add dialog`}
-                  />
-                </CardContent>
-              </Card>
-              <Card className="bg-[var(--surface-2)] shadow-none">
-                <CardContent className="grid gap-3 p-6 text-sm leading-7 text-[var(--muted)] md:text-base">
-                  <p><strong>components/ui</strong>: componentes do Shadcn</p>
-                  <p><strong>lib/utils.ts</strong>: função auxiliar para classes CSS</p>
-                  <p><strong>components.json</strong>: configuração do Shadcn</p>
-                  <p><strong>CSS global</strong>: tema e variáveis</p>
-                </CardContent>
-              </Card>
-            </div>
-            <Card className="bg-[#09120f] text-emerald-50">
-              <CardHeader>
-                <CardTitle className="text-3xl">Estrutura comum</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <pre className="text-sm leading-8 text-emerald-50 md:text-base">
-                  <code>{`src/\n  components/\n    ui/\n      button.tsx\n      card.tsx\n      input.tsx\n      dialog.tsx\n  lib/\n    utils.ts\ncomponents.json`}</code>
-                </pre>
-              </CardContent>
-            </Card>
-          </div>
-        </SlideShell>
-      );
     case 9:
-      return (
-        <SlideShell slide={slide}>
-          <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
-            <Card className="bg-[var(--surface)]">
-              <CardHeader>
-                <CardTitle className="text-4xl tracking-[-0.05em] md:text-5xl">Exemplo prático</CardTitle>
-                <CardDescription className="text-base md:text-lg">
-                  Mesmo usando componentes prontos, continua sendo React normal. O desenvolvedor ainda controla a tela.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Card className="mx-auto max-w-md bg-[var(--surface-2)] shadow-none">
-                  <CardHeader>
-                    <CardTitle>Entrar no sistema</CardTitle>
-                  </CardHeader>
-                  <CardContent className="grid gap-4">
-                    <label className="grid gap-2 text-sm font-medium">
-                      E-mail
-                      <input
-                        className="h-11 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 outline-none ring-offset-background transition focus-visible:ring-2 focus-visible:ring-emerald-400/70"
-                        onChange={(event) => setLoginEmail(event.target.value)}
-                        placeholder="lucas@email.com"
-                        value={loginEmail}
-                      />
-                    </label>
-                    <label className="grid gap-2 text-sm font-medium">
-                      Senha
-                      <input
-                        className="h-11 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 outline-none ring-offset-background transition focus-visible:ring-2 focus-visible:ring-emerald-400/70"
-                        placeholder="••••••••"
-                        type="password"
-                      />
-                    </label>
-                    <Button className="w-full" onClick={runLoginDemo}>
-                      Entrar
-                    </Button>
-                    <p className="text-sm text-[var(--muted)]">{loginMessage}</p>
-                  </CardContent>
-                </Card>
-              </CardContent>
-            </Card>
-            <CodeBlock code={loginSnippet} />
-          </div>
-        </SlideShell>
-      );
-    case 10:
       return (
         <SlideShell slide={slide}>
           <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
@@ -755,7 +709,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
           </div>
         </SlideShell>
       );
-    case 11:
+    case 10:
       return (
         <SlideShell slide={slide}>
           <div className="grid gap-6 lg:grid-cols-[1.02fr_0.98fr]">
@@ -814,7 +768,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
           </div>
         </SlideShell>
       );
-    case 12:
+    case 11:
       return (
         <SlideShell slide={slide}>
           <Card>
@@ -858,7 +812,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
           </Card>
         </SlideShell>
       );
-    case 13:
+    case 12:
       return (
         <SlideShell slide={slide}>
           <Card className="overflow-hidden bg-[radial-gradient(circle_at_top_right,_rgba(242,239,120,0.18),_transparent_32%),linear-gradient(135deg,#052824_0%,#0a3b35_45%,#082925_100%)] text-white">
