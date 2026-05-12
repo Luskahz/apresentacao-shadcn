@@ -14,6 +14,7 @@ import { slides, totalPresentationTime } from "@/data/slides";
 
 const CASE_3_CARD_COUNT = 3;
 const CASE_5_STAGE_COUNT = 7;
+const CASE_11_CARD_COUNT = 4;
 
 function SlidePage() {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ function SlidePage() {
   const [theme, setTheme] = useState(() => document.documentElement.dataset.theme || "light");
   const [case3VisibleCards, setCase3VisibleCards] = useState(0);
   const [case5VisibleStages, setCase5VisibleStages] = useState(0);
+  const [case11VisibleCards, setCase11VisibleCards] = useState(0);
 
   const goToSlide = useCallback(
     (targetId, direction = "direct") => {
@@ -35,6 +37,10 @@ function SlidePage() {
 
       if (targetId === 5) {
         setCase5VisibleStages(direction === "backward" ? CASE_5_STAGE_COUNT : 0);
+      }
+
+      if (targetId === 11) {
+        setCase11VisibleCards(direction === "backward" ? CASE_11_CARD_COUNT : 0);
       }
 
       navigate(`/slides/${targetId}`);
@@ -53,10 +59,15 @@ function SlidePage() {
       return;
     }
 
+    if (currentSlide.id === 11 && case11VisibleCards < CASE_11_CARD_COUNT) {
+      setCase11VisibleCards((visibleCards) => Math.min(visibleCards + 1, CASE_11_CARD_COUNT));
+      return;
+    }
+
     if (currentSlide.id < slides.length) {
       goToSlide(currentSlide.id + 1, "forward");
     }
-  }, [case3VisibleCards, case5VisibleStages, currentSlide.id, goToSlide]);
+  }, [case3VisibleCards, case5VisibleStages, case11VisibleCards, currentSlide.id, goToSlide]);
 
   const goPrevious = useCallback(() => {
     if (currentSlide.id === 3 && case3VisibleCards > 0) {
@@ -69,10 +80,15 @@ function SlidePage() {
       return;
     }
 
+    if (currentSlide.id === 11 && case11VisibleCards > 0) {
+      setCase11VisibleCards((visibleCards) => Math.max(visibleCards - 1, 0));
+      return;
+    }
+
     if (currentSlide.id > 1) {
       goToSlide(currentSlide.id - 1, "backward");
     }
-  }, [case3VisibleCards, case5VisibleStages, currentSlide.id, goToSlide]);
+  }, [case3VisibleCards, case5VisibleStages, case11VisibleCards, currentSlide.id, goToSlide]);
 
   useEffect(() => {
     if (slideIndex === -1) {
@@ -181,6 +197,7 @@ function SlidePage() {
             <SlideRenderer
               case3VisibleCards={case3VisibleCards}
               case5VisibleStages={case5VisibleStages}
+              case11VisibleCards={case11VisibleCards}
               slide={currentSlide}
             />
           </div>

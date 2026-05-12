@@ -118,6 +118,30 @@ const shadcnBenefits = [
   "padrão visual",
 ];
 
+const slide11Advantages = [
+  "rápido",
+  "moderno",
+  "bonito",
+  "customizável",
+  "acessível",
+  "bom para design system",
+  "funciona bem com IA",
+];
+
+const slide11Limitations = [
+  "exige React",
+  "exige Tailwind",
+  "manutenção fica com a equipe",
+  "pode virar bagunça sem padrão",
+  "não é ideal para quem só quer copiar sem entender",
+];
+
+const slide11GoodFit = [
+];
+
+const slide11Requirements = [
+];
+
 const stackCompositionSteps = [
   "React monta o componente.",
   "Lucide entra com os ícones da interface.",
@@ -645,7 +669,7 @@ function ComponentPreview({ showcaseId }) {
   }
 }
 
-export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, slide }) {
+export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, case11VisibleCards = 0, slide }) {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginMessage, setLoginMessage] = useState("Demo funcional com o fluxo representado em React.");
   const [variant, setVariant] = useState("default");
@@ -767,14 +791,6 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
         </CardHeader>
 
         <CardContent className="space-y-5">
-          <div className="flex flex-wrap gap-2">
-            {repeatedInterfaceBlocks.map((item) => (
-              <Badge key={item} variant="muted">
-                {item}
-              </Badge>
-            ))}
-          </div>
-
           <div className="grid gap-4 lg:grid-cols-[0.9fr_1fr_1fr]">
             <FlipCard
               back={
@@ -1158,9 +1174,6 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
               <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
                 <div className="max-w-4xl space-y-2">
                   <CardTitle className="text-4xl tracking-[-0.05em] md:text-5xl">Componentes principais</CardTitle>
-                  <CardDescription className="text-base md:text-lg">
-                    Cada label agora vira uma face do carrossel: à esquerda um snippet do componente e à direita a versão visual dele.
-                  </CardDescription>
                 </div>
                 <div className="rounded-full border border-[var(--border)] bg-[var(--surface-2)] px-4 py-2 text-sm font-medium text-[var(--muted)]">
                   {String(activeMainComponent + 1).padStart(2, "0")} / {String(componentShowcases.length).padStart(2, "0")}
@@ -1336,42 +1349,84 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
       return (
         <SlideShell slide={slide}>
           <Card>
-            <CardHeader>
-              <CardTitle className="text-4xl tracking-[-0.05em] md:text-5xl">Vantagens e limitações</CardTitle>
+            <CardHeader className="max-w-5xl pb-4">
+              <CardTitle className="text-3xl tracking-[-0.05em] md:text-4xl">Vantagens e limitações</CardTitle>
+              <CardDescription className="text-sm md:text-base">
+                O Shadcn acelera muito a construção da interface, mas cobra maturidade técnica da equipe para manter padrão e organização.
+              </CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-5 md:grid-cols-2">
-              <Card className="bg-emerald-400/90 text-emerald-950 shadow-none">
-                <CardHeader>
-                  <CardTitle>Vantagens</CardTitle>
-                </CardHeader>
-                <CardContent className="grid gap-3 text-base md:text-lg">
-                  {["rápido", "moderno", "bonito", "customizável", "acessível", "bom para design system", "funciona bem com IA"].map((item) => (
-                    <div className="flex items-center gap-3" key={item}>
-                      <Check className="size-5" />
-                      <span>{item}</span>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-              <Card className="bg-rose-300/92 text-rose-950 shadow-none">
-                <CardHeader>
-                  <CardTitle>Limitações</CardTitle>
-                </CardHeader>
-                <CardContent className="grid gap-3 text-base md:text-lg">
-                  {[
-                    "exige React",
-                    "exige Tailwind",
-                    "manutenção fica com a equipe",
-                    "pode virar bagunça sem padrão",
-                    "não é ideal para quem só quer copiar sem entender",
-                  ].map((item) => (
-                    <div className="flex items-center gap-3" key={item}>
-                      <ChevronRight className="size-5" />
-                      <span>{item}</span>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
+            <CardContent className="space-y-4">
+              <div className="grid gap-4 lg:grid-cols-2">
+                <FlipCard
+                  back={
+                    <Card className="h-full overflow-hidden bg-emerald-400/90 text-emerald-950 shadow-none">
+                      <CardHeader className="p-5 pb-3">
+                        <div className="flex items-center justify-between gap-3">
+                          <CardTitle className="text-xl">Vantagens</CardTitle>
+                          <Badge className="bg-emerald-950/10 text-emerald-950" variant="muted">
+                            pontos fortes
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="grid gap-2 px-5 pb-5 text-sm leading-5 md:text-[15px]">
+                        {slide11Advantages.map((item) => (
+                          <div className="flex items-start gap-3 rounded-xl bg-emerald-950/10 px-3 py-2" key={item}>
+                            <Check className="mt-0.5 size-4 shrink-0" />
+                            <span>{item}</span>
+                          </div>
+                        ))}
+                      </CardContent>
+                    </Card>
+                  }
+                  className="h-[500px]"
+                  flipped={case11VisibleCards >= 1}
+                  front={
+                    <Card className="grid h-full place-items-center overflow-hidden bg-emerald-400/90 p-5 text-center text-emerald-950 shadow-none">
+                      <div className="space-y-3">
+                        <Badge className="bg-emerald-950/10 text-emerald-950" variant="muted">
+                          pontos fortes
+                        </Badge>
+                        <CardTitle className="text-2xl tracking-[-0.04em] md:text-3xl">Vantagens</CardTitle>
+                      </div>
+                    </Card>
+                  }
+                />
+
+                <FlipCard
+                  back={
+                    <Card className="h-full overflow-hidden bg-rose-300/92 text-rose-950 shadow-none">
+                      <CardHeader className="p-5 pb-3">
+                        <div className="flex items-center justify-between gap-3">
+                          <CardTitle className="text-xl">Limitações</CardTitle>
+                          <Badge className="bg-rose-950/10 text-rose-950" variant="muted">
+                            trade-offs
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="grid gap-2 px-5 pb-5 text-sm leading-5 md:text-[15px]">
+                        {slide11Limitations.map((item) => (
+                          <div className="flex items-start gap-3 rounded-xl bg-rose-950/10 px-3 py-2" key={item}>
+                            <ChevronRight className="mt-0.5 size-4 shrink-0" />
+                            <span>{item}</span>
+                          </div>
+                        ))}
+                      </CardContent>
+                    </Card>
+                  }
+                  className="h-[500px]"
+                  flipped={case11VisibleCards >= 2}
+                  front={
+                    <Card className="grid h-full place-items-center overflow-hidden bg-rose-300/92 p-5 text-center text-rose-950 shadow-none">
+                      <div className="space-y-3">
+                        <Badge className="bg-rose-950/10 text-rose-950" variant="muted">
+                          trade-offs
+                        </Badge>
+                        <CardTitle className="text-2xl tracking-[-0.04em] md:text-3xl">Limitações</CardTitle>
+                      </div>
+                    </Card>
+                  }
+                />
+              </div>
             </CardContent>
           </Card>
         </SlideShell>
