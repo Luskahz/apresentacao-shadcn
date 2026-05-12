@@ -150,12 +150,12 @@ function CarouselPrevious({
   const { orientation, scrollPrev, canScrollPrev } = useCarousel()
 
   return (
-    <Button
+<Button
       data-slot="carousel-previous"
       variant={variant}
       size={size}
       className={cn("absolute touch-manipulation rounded-full", orientation === "horizontal"
-        ? "top-1/2 left-4 -translate-y-1/2"
+        ? "top-1/2 -left-12 -translate-y-1/2"
         : "-top-12 left-1/2 -translate-x-1/2 rotate-90", className)}
       disabled={!canScrollPrev}
       onClick={scrollPrev}
@@ -180,7 +180,7 @@ function CarouselNext({
       variant={variant}
       size={size}
       className={cn("absolute touch-manipulation rounded-full", orientation === "horizontal"
-        ? "top-1/2 right-4 -translate-y-1/2"
+        ? "top-1/2 -right-12 -translate-y-1/2"
         : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90", className)}
       disabled={!canScrollNext}
       onClick={scrollNext}

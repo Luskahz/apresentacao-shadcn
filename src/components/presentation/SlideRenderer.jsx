@@ -256,7 +256,10 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
 
                 </CardHeader>
                 <div className="flex justify-center">
-                  <Carousel className={"w-75"}>
+                  <Carousel
+                    className="w-full"
+                  
+                  >
                     <CarouselContent>
                       <CarouselItem>oi</CarouselItem>
                       <CarouselItem>oi2</CarouselItem>
