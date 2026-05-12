@@ -144,8 +144,6 @@ const setupCommandCards = [
     command: "npx shadcn@latest init",
     eyebrow: "base do projeto",
     title: "Prepara a estrutura inicial do Shadcn",
-    summary:
-      "Esse passo cria a base para o restante da CLI: pasta utilitária, pasta dos componentes e o arquivo de configuração do projeto.",
     console: `$ npx shadcn@latest init
 [ok] Checking project
 [ok] Detecting framework: Vite
@@ -166,17 +164,13 @@ const setupCommandCards = [
   lib/
     utils.js
   index.css
-components.json`,
-    example: `// Depois do init, a CLI já sabe onde criar componentes
-npx shadcn@latest add button`,
+components.json`
   },
   {
     id: "button",
     command: "npx shadcn@latest add button",
     eyebrow: "acao primaria",
     title: "Adiciona o componente Button ao projeto",
-    summary:
-      "A CLI copia o arquivo real do botão para dentro do projeto, com variantes e classes prontas para edição.",
     console: `$ npx shadcn@latest add button
 [ok] Checking registry
 [ok] Resolving dependencies
@@ -191,19 +185,12 @@ npx shadcn@latest add button`,
   components/
     ui/
       button.jsx`,
-    example: `import { Button } from "@/components/ui/button";
-
-export function Actions() {
-  return <Button>Salvar</Button>;
-}`,
   },
   {
     id: "card",
     command: "npx shadcn@latest add card",
     eyebrow: "bloco de conteudo",
     title: "Cria o componente Card para estruturar conteúdo",
-    summary:
-      "Esse comando adiciona um container pronto para títulos, descrição e conteúdo, ótimo para dashboards, login e resumos.",
     console: `$ npx shadcn@latest add card
 [ok] Checking registry
 [ok] Resolving dependencies
@@ -217,27 +204,13 @@ export function Actions() {
     structure: `src/
   components/
     ui/
-      card.jsx`,
-    example: `import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-export function SummaryCard() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Resumo</CardTitle>
-      </CardHeader>
-      <CardContent>Total de acessos</CardContent>
-    </Card>
-  );
-}`,
+      card.jsx`
   },
   {
     id: "input",
     command: "npx shadcn@latest add input",
     eyebrow: "entrada de dados",
     title: "Adiciona o Input para formulários",
-    summary:
-      "O comando cria um campo de entrada estilizado e consistente com o restante da interface, pronto para login, busca e cadastro.",
     console: `$ npx shadcn@latest add input
 [ok] Checking registry
 [ok] Resolving dependencies
@@ -251,20 +224,13 @@ export function SummaryCard() {
     structure: `src/
   components/
     ui/
-      input.jsx`,
-    example: `import { Input } from "@/components/ui/input";
-
-export function SearchField() {
-  return <Input placeholder="Buscar cliente" />;
-}`,
+      input.jsx`
   },
   {
     id: "dialog",
     command: "npx shadcn@latest add dialog",
     eyebrow: "modal interativa",
     title: "Cria o Dialog para modais e confirmações",
-    summary:
-      "Aqui entram os blocos de modal baseados em Radix UI, com estrutura acessível para abrir, fechar e organizar conteúdo.",
     console: `$ npx shadcn@latest add dialog
 [ok] Checking registry
 [ok] Resolving dependencies
@@ -278,20 +244,7 @@ export function SearchField() {
     structure: `src/
   components/
     ui/
-      dialog.jsx`,
-    example: `import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-
-export function ConfirmDialog() {
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button>Abrir modal</Button>
-      </DialogTrigger>
-      <DialogContent>Conteúdo do modal</DialogContent>
-    </Dialog>
-  );
-}`,
+      dialog.jsx`
   },
 ];
 
@@ -609,14 +562,9 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
     <SlideShell slide={slide}>
       <Card>
         <CardHeader className="max-w-5xl pb-4">
-          <CardTitle className="text-3xl tracking-[-0.05em] md:text-4xl">
+          <CardTitle className="text-3xl tracking-[-0.05em] md:text-3xl">
             Tecnologias usadas
           </CardTitle>
-
-          <CardDescription className="text-sm md:text-base">
-            O shadcn/ui combina várias ferramentas. Cada uma resolve uma parte da interface:
-            estrutura, estilo, acessibilidade, variantes e instalação.
-          </CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-4">
@@ -645,7 +593,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                         </CardContent>
                       </Card>
                     }
-                    className="h-[250px]"
+                    className="h-[180px]"
                     flipped={case5VisibleStages >= tech.stage}
                     front={
                       <Card className="grid h-full place-items-center bg-[var(--surface-2)] p-5 text-center shadow-none">
@@ -678,7 +626,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                     </CardContent>
                   </Card>
                 }
-                className="h-[320px]"
+                className="h-[370px]"
                 flipped={case5VisibleStages >= 7}
                 front={
                   <Card className="grid h-full place-items-center bg-[var(--surface-2)] p-5 text-center shadow-none">
@@ -694,7 +642,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
 
               <FlipCard
                 back={<CodeBlock className="h-full" code={stackCompositionSnippet} />}
-                className="h-[320px]"
+                className="h-[370px]"
                 flipped={case5VisibleStages >= 7}
                 front={
                   <Card className="grid h-full place-items-center border-white/10 bg-[#09120f] p-5 text-center text-emerald-50 shadow-none">
@@ -757,9 +705,6 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
               <Card>
                 <CardHeader>
                   <CardTitle className="text-4xl tracking-[-0.05em] md:text-5xl">Instalação e estrutura</CardTitle>
-                  <CardDescription className="text-base md:text-lg">
-                    Cada comando vira um passo da apresentação. Clique em um deles para trocar o painel lateral com a saída do console e o que entrou no projeto.
-                  </CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-3">
                   {setupCommandCards.map((item, index) => {
@@ -790,26 +735,10 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                   })}
                 </CardContent>
               </Card>
-              <Card className="bg-[var(--surface-2)] shadow-none">
-                <CardContent className="grid gap-3 p-6 text-sm leading-7 text-[var(--muted)] md:text-base">
-                  <p><strong>init</strong>: prepara a base para a CLI trabalhar no projeto.</p>
-                  <p><strong>add</strong>: copia arquivos reais para <code>src/components/ui</code>.</p>
-                  <p><strong>efeito visual</strong>: o card lateral muda conforme o comando selecionado.</p>
-                </CardContent>
-              </Card>
             </div>
             <Card className="overflow-hidden bg-[#09120f] text-emerald-50">
               <CardHeader className="border-b border-white/10 pb-6">
-                <div className="flex flex-wrap items-center gap-3">
-                  <Badge className="bg-emerald-300 text-emerald-950">{activeSetupCard.eyebrow}</Badge>
-                  <Badge className="border-white/15 bg-white/6 text-emerald-50" variant="outline">
-                    painel dinâmico
-                  </Badge>
-                </div>
-                <CardTitle className="text-3xl md:text-4xl">{activeSetupCard.title}</CardTitle>
-                <CardDescription className="max-w-2xl text-base leading-7 text-emerald-50/72 md:text-lg">
-                  {activeSetupCard.summary}
-                </CardDescription>
+                <CardTitle className="text-4xl md:text-3xl">{activeSetupCard.title}</CardTitle>
               </CardHeader>
               <CardContent className="grid gap-5 p-6">
                 <div className="overflow-hidden rounded-[24px] border border-white/10 bg-[#06100d]">
@@ -839,14 +768,6 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                       <code>{activeSetupCard.structure}</code>
                     </pre>
                   </div>
-                </div>
-                <div className="overflow-hidden rounded-[24px] border border-white/10 bg-[#06100d]">
-                  <div className="border-b border-white/10 px-5 py-3 text-[0.68rem] uppercase tracking-[0.28em] text-emerald-300">
-                    Exemplo rápido
-                  </div>
-                  <pre className="overflow-x-auto p-5 text-sm leading-7 text-emerald-50 md:text-[0.95rem]">
-                    <code>{activeSetupCard.example}</code>
-                  </pre>
                 </div>
               </CardContent>
             </Card>
