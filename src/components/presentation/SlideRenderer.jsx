@@ -138,6 +138,163 @@ export function LoginPage() {
   );
 }`;
 
+const setupCommandCards = [
+  {
+    id: "init",
+    command: "npx shadcn@latest init",
+    eyebrow: "base do projeto",
+    title: "Prepara a estrutura inicial do Shadcn",
+    summary:
+      "Esse passo cria a base para o restante da CLI: pasta utilitária, pasta dos componentes e o arquivo de configuração do projeto.",
+    console: `$ npx shadcn@latest init
+[ok] Checking project
+[ok] Detecting framework: Vite
+[ok] Validating Tailwind CSS
+[ok] Writing components.json
+[ok] Creating src/lib/utils.js
+[ok] Creating src/components/ui
+[ok] Updating src/index.css`,
+    created: [
+      "src/components/ui/ para receber os componentes",
+      "src/lib/utils.js com a função cn()",
+      "components.json com aliases, estilo e paths",
+      "CSS global com variáveis de tema",
+    ],
+    structure: `src/
+  components/
+    ui/
+  lib/
+    utils.js
+  index.css
+components.json`,
+    example: `// Depois do init, a CLI já sabe onde criar componentes
+npx shadcn@latest add button`,
+  },
+  {
+    id: "button",
+    command: "npx shadcn@latest add button",
+    eyebrow: "acao primaria",
+    title: "Adiciona o componente Button ao projeto",
+    summary:
+      "A CLI copia o arquivo real do botão para dentro do projeto, com variantes e classes prontas para edição.",
+    console: `$ npx shadcn@latest add button
+[ok] Checking registry
+[ok] Resolving dependencies
+[ok] Created 1 file:
+  - src/components/ui/button.jsx`,
+    created: [
+      "src/components/ui/button.jsx com variantes do componente",
+      "import pronto para usar em qualquer tela React",
+      "base para ações como salvar, enviar e confirmar",
+    ],
+    structure: `src/
+  components/
+    ui/
+      button.jsx`,
+    example: `import { Button } from "@/components/ui/button";
+
+export function Actions() {
+  return <Button>Salvar</Button>;
+}`,
+  },
+  {
+    id: "card",
+    command: "npx shadcn@latest add card",
+    eyebrow: "bloco de conteudo",
+    title: "Cria o componente Card para estruturar conteúdo",
+    summary:
+      "Esse comando adiciona um container pronto para títulos, descrição e conteúdo, ótimo para dashboards, login e resumos.",
+    console: `$ npx shadcn@latest add card
+[ok] Checking registry
+[ok] Resolving dependencies
+[ok] Created 1 file:
+  - src/components/ui/card.jsx`,
+    created: [
+      "src/components/ui/card.jsx com Card, Header, Title e Content",
+      "estrutura reutilizável para painéis e seções da interface",
+      "import agrupado para montar blocos visuais rapidamente",
+    ],
+    structure: `src/
+  components/
+    ui/
+      card.jsx`,
+    example: `import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+export function SummaryCard() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Resumo</CardTitle>
+      </CardHeader>
+      <CardContent>Total de acessos</CardContent>
+    </Card>
+  );
+}`,
+  },
+  {
+    id: "input",
+    command: "npx shadcn@latest add input",
+    eyebrow: "entrada de dados",
+    title: "Adiciona o Input para formulários",
+    summary:
+      "O comando cria um campo de entrada estilizado e consistente com o restante da interface, pronto para login, busca e cadastro.",
+    console: `$ npx shadcn@latest add input
+[ok] Checking registry
+[ok] Resolving dependencies
+[ok] Created 1 file:
+  - src/components/ui/input.jsx`,
+    created: [
+      "src/components/ui/input.jsx com estilos base do campo",
+      "componente pronto para formulários, busca e filtros",
+      "uso simples com placeholder, type e classes extras",
+    ],
+    structure: `src/
+  components/
+    ui/
+      input.jsx`,
+    example: `import { Input } from "@/components/ui/input";
+
+export function SearchField() {
+  return <Input placeholder="Buscar cliente" />;
+}`,
+  },
+  {
+    id: "dialog",
+    command: "npx shadcn@latest add dialog",
+    eyebrow: "modal interativa",
+    title: "Cria o Dialog para modais e confirmações",
+    summary:
+      "Aqui entram os blocos de modal baseados em Radix UI, com estrutura acessível para abrir, fechar e organizar conteúdo.",
+    console: `$ npx shadcn@latest add dialog
+[ok] Checking registry
+[ok] Resolving dependencies
+[ok] Created 1 file:
+  - src/components/ui/dialog.jsx`,
+    created: [
+      "src/components/ui/dialog.jsx com Dialog, Trigger e Content",
+      "base acessível para modal, confirmação e detalhes",
+      "composição pronta para combinar com Button e Card",
+    ],
+    structure: `src/
+  components/
+    ui/
+      dialog.jsx`,
+    example: `import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+
+export function ConfirmDialog() {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button>Abrir modal</Button>
+      </DialogTrigger>
+      <DialogContent>Conteúdo do modal</DialogContent>
+    </Dialog>
+  );
+}`,
+  },
+];
+
 function CodeBlock({ className, code, copyText = code }) {
   async function handleCopy() {
     try {
@@ -183,6 +340,9 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
   const [loginEmail, setLoginEmail] = useState("");
   const [loginMessage, setLoginMessage] = useState("Demo funcional com o fluxo representado em React.");
   const [variant, setVariant] = useState("default");
+  const [activeSetupCommand, setActiveSetupCommand] = useState(setupCommandCards[0].id);
+
+  const activeSetupCard = setupCommandCards.find((item) => item.id === activeSetupCommand) ?? setupCommandCards[0];
 
   function runLoginDemo() {
     if (!loginEmail) {
@@ -589,38 +749,105 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
           </Card>
         </SlideShell>
       );
-      case 7:
+    case 7:
       return (
         <SlideShell slide={slide}>
-          <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+          <div className="grid gap-6 lg:grid-cols-[0.88fr_1.12fr]">
             <div className="grid gap-6">
               <Card>
                 <CardHeader>
                   <CardTitle className="text-4xl tracking-[-0.05em] md:text-5xl">Instalação e estrutura</CardTitle>
+                  <CardDescription className="text-base md:text-lg">
+                    Cada comando vira um passo da apresentação. Clique em um deles para trocar o painel lateral com a saída do console e o que entrou no projeto.
+                  </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <CodeBlock
-                    code={`npx shadcn@latest init\nnpx shadcn@latest add button\nnpx shadcn@latest add card\nnpx shadcn@latest add input\nnpx shadcn@latest add dialog`}
-                  />
+                <CardContent className="grid gap-3">
+                  {setupCommandCards.map((item, index) => {
+                    const isActive = item.id === activeSetupCard.id;
+
+                    return (
+                      <Button
+                        className={cn(
+                          "h-auto items-start justify-between rounded-[24px] border px-4 py-4 text-left transition-all md:px-5",
+                          isActive
+                            ? "border-emerald-300/35 bg-emerald-300/10 text-foreground shadow-[0_0_0_1px_rgba(110,231,183,0.18)]"
+                            : "border-[var(--border)] bg-[var(--surface-2)] text-[var(--muted)] hover:bg-[var(--surface)]",
+                        )}
+                        key={item.id}
+                        onClick={() => setActiveSetupCommand(item.id)}
+                        variant="ghost"
+                      >
+                        <div className="grid gap-2">
+                          <span className="text-[0.68rem] uppercase tracking-[0.28em] text-emerald-300/80">Passo 0{index + 1}</span>
+                          <code className="font-mono text-sm text-current md:text-base">{item.command}</code>
+                        </div>
+                        <div className="flex items-center gap-2 pl-4 text-[0.68rem] uppercase tracking-[0.24em] text-emerald-100/70">
+                          <span>{isActive ? "ativo" : item.eyebrow}</span>
+                          <ChevronRight className={cn("size-4 transition-transform", isActive && "translate-x-1")} />
+                        </div>
+                      </Button>
+                    );
+                  })}
                 </CardContent>
               </Card>
               <Card className="bg-[var(--surface-2)] shadow-none">
                 <CardContent className="grid gap-3 p-6 text-sm leading-7 text-[var(--muted)] md:text-base">
-                  <p><strong>components/ui</strong>: componentes do Shadcn</p>
-                  <p><strong>lib/utils.ts</strong>: função auxiliar para classes CSS</p>
-                  <p><strong>components.json</strong>: configuração do Shadcn</p>
-                  <p><strong>CSS global</strong>: tema e variáveis</p>
+                  <p><strong>init</strong>: prepara a base para a CLI trabalhar no projeto.</p>
+                  <p><strong>add</strong>: copia arquivos reais para <code>src/components/ui</code>.</p>
+                  <p><strong>efeito visual</strong>: o card lateral muda conforme o comando selecionado.</p>
                 </CardContent>
               </Card>
             </div>
-            <Card className="bg-[#09120f] text-emerald-50">
-              <CardHeader>
-                <CardTitle className="text-3xl">Estrutura comum</CardTitle>
+            <Card className="overflow-hidden bg-[#09120f] text-emerald-50">
+              <CardHeader className="border-b border-white/10 pb-6">
+                <div className="flex flex-wrap items-center gap-3">
+                  <Badge className="bg-emerald-300 text-emerald-950">{activeSetupCard.eyebrow}</Badge>
+                  <Badge className="border-white/15 bg-white/6 text-emerald-50" variant="outline">
+                    painel dinâmico
+                  </Badge>
+                </div>
+                <CardTitle className="text-3xl md:text-4xl">{activeSetupCard.title}</CardTitle>
+                <CardDescription className="max-w-2xl text-base leading-7 text-emerald-50/72 md:text-lg">
+                  {activeSetupCard.summary}
+                </CardDescription>
               </CardHeader>
-              <CardContent>
-                <pre className="text-sm leading-8 text-emerald-50 md:text-base">
-                  <code>{`src/\n  components/\n    ui/\n      button.tsx\n      card.tsx\n      input.tsx\n      dialog.tsx\n  lib/\n    utils.ts\ncomponents.json`}</code>
-                </pre>
+              <CardContent className="grid gap-5 p-6">
+                <div className="overflow-hidden rounded-[24px] border border-white/10 bg-[#06100d]">
+                  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-5 py-3">
+                    <span className="text-[0.68rem] uppercase tracking-[0.28em] text-emerald-300">Console</span>
+                    <code className="text-xs text-emerald-50/60">{activeSetupCard.command}</code>
+                  </div>
+                  <pre className="overflow-x-auto p-5 text-sm leading-7 text-emerald-50 md:text-[0.95rem]">
+                    <code>{activeSetupCard.console}</code>
+                  </pre>
+                </div>
+                <div className="grid gap-5 xl:grid-cols-[0.92fr_1.08fr]">
+                  <div className="rounded-[24px] border border-white/10 bg-[#06100d] p-5">
+                    <span className="text-[0.68rem] uppercase tracking-[0.28em] text-emerald-300">O que ele cria</span>
+                    <div className="mt-4 grid gap-3 text-sm leading-6 text-emerald-50/82 md:text-base">
+                      {activeSetupCard.created.map((item) => (
+                        <div className="flex items-start gap-3" key={item}>
+                          <Check className="mt-0.5 size-4 shrink-0 text-emerald-300" />
+                          <span>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="rounded-[24px] border border-white/10 bg-[#06100d] p-5">
+                    <span className="text-[0.68rem] uppercase tracking-[0.28em] text-emerald-300">Estrutura afetada</span>
+                    <pre className="mt-4 overflow-x-auto text-sm leading-7 text-emerald-50 md:text-base">
+                      <code>{activeSetupCard.structure}</code>
+                    </pre>
+                  </div>
+                </div>
+                <div className="overflow-hidden rounded-[24px] border border-white/10 bg-[#06100d]">
+                  <div className="border-b border-white/10 px-5 py-3 text-[0.68rem] uppercase tracking-[0.28em] text-emerald-300">
+                    Exemplo rápido
+                  </div>
+                  <pre className="overflow-x-auto p-5 text-sm leading-7 text-emerald-50 md:text-[0.95rem]">
+                    <code>{activeSetupCard.example}</code>
+                  </pre>
+                </div>
               </CardContent>
             </Card>
           </div>
