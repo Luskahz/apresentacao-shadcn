@@ -7,7 +7,7 @@ export const slides = [
   { id: 6, title: "Comparação com Bootstrap e Material UI", duration: "3 min", speaker: "João Gabriel", category: "Comparação" },
   { id: 7, title: "Instalação e estrutura", duration: "3 min", speaker: "Lucas Alves", category: "Setup" },
   { id: 8, title: "Componentes principais", duration: "2 min", speaker: "Lucas Alves", category: "Componentes" },
-  { id: 9, title: "Customização", duration: "2 min", speaker: "Lucas Alves", category: "Customização" },
+  { id: 9, title: "Customização", duration: "2 min", speaker: "João Gabriel", category: "Customização" },
   { id: 10, title: "Uso da IA com Shadcn", duration: "3 min", speaker: "João Gabriel", category: "IA" },
   { id: 11, title: "Vantagens e limitações", duration: "1 min", speaker: "Lucas Alves", category: "Análise" },
   { id: 12, title: "Conclusão", duration: "2 min", speaker: "João Gabriel", category: "Fechamento" },

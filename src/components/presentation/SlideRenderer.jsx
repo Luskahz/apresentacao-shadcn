@@ -1,14 +1,41 @@
-import { useState } from "react";
-import { Check, ChevronRight, Copy, LayoutDashboard, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Check, ChevronRight, Copy, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { FlipCard } from "@/components/ui/flip-card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Carousel as PresentationCarousel,
+  CarouselContent as PresentationCarouselContent,
+  CarouselItem as PresentationCarouselItem,
+  CarouselNext as PresentationCarouselNext,
+  CarouselPrevious as PresentationCarouselPrevious,
+} from "@/components/ui/presentation-carousel";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
 const techStack = [
@@ -57,9 +84,6 @@ const techStack = [
 ];
 
 const techRows = [techStack.slice(0, 3), techStack.slice(3, 6)];
-
-const mainComponents = ["Button", "Input", "Card", "Dialog", "Table", "Select", "Dropdown", "Tabs", "Form", "Toast / Sonner"];
-
 
 const repeatedInterfaceBlocks = [
   "Button",
@@ -248,6 +272,196 @@ components.json`
   },
 ];
 
+const componentShowcases = [
+  {
+    id: "button",
+    label: "Button",
+    eyebrow: "ação primária",
+    description: "Botões prontos para salvar, confirmar, cancelar ou seguir fluxos da interface.",
+    useCase: "É um dos componentes mais usados do Shadcn porque já vem com variantes e estados visuais consistentes.",
+    code: `import { Button } from "@/components/ui/button";
+
+<Button variant="outline">Ver detalhes</Button>`,
+  },
+  {
+    id: "input",
+    label: "Input",
+    eyebrow: "entrada de dados",
+    description: "Campos de texto usados em login, filtros, buscas e formulários em geral.",
+    useCase: "Ajuda a manter o padrão visual dos campos sem precisar estilizar input por input.",
+    code: `import { Input } from "@/components/ui/input";
+
+<Input placeholder="voce@empresa.com" type="email" />`,
+  },
+  {
+    id: "card",
+    label: "Card",
+    eyebrow: "bloco de conteúdo",
+    description: "Organiza seções da tela como resumos, listas rápidas e painéis de dashboard.",
+    useCase: "É a base visual para agrupar informações com header, conteúdo e ações no mesmo padrão.",
+    code: `import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+<Card className="w-full max-w-sm">
+  <CardHeader>
+    <CardTitle>Plano Pro</CardTitle>
+    <CardDescription>Mais usado em dashboards</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <p>Inclui métricas, formulários e tabelas.</p>
+  </CardContent>
+</Card>`,
+  },
+  {
+    id: "dialog",
+    label: "Dialog",
+    eyebrow: "modal",
+    description: "Usado para confirmações, formulários rápidos, detalhes e ações críticas.",
+    useCase: "Como vem baseado em Radix, já entrega estrutura acessível para modais e overlays.",
+    code: `import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+
+<Dialog>
+  <DialogTrigger asChild>
+    <Button variant="outline">Abrir dialog</Button>
+  </DialogTrigger>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Editar perfil</DialogTitle>
+      <DialogDescription>Atualize as informações e salve as alterações.</DialogDescription>
+    </DialogHeader>
+    <DialogFooter>
+      <Button>Salvar alterações</Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>`,
+  },
+  {
+    id: "table",
+    label: "Table",
+    eyebrow: "listagem",
+    description: "Mostra dados tabulares como usuários, pedidos, relatórios e histórico.",
+    useCase: "É útil quando a aplicação precisa listar muita informação de forma legível e escaneável.",
+    code: `import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Nome</TableHead>
+      <TableHead>Cargo</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>Ana Souza</TableCell>
+      <TableCell>Front-end</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>`,
+  },
+  {
+    id: "select",
+    label: "Select",
+    eyebrow: "escolha controlada",
+    description: "Permite escolher uma opção dentro de listas pequenas ou médias com bom feedback visual.",
+    useCase: "Funciona bem para status, plano, categoria e qualquer campo de seleção única.",
+    code: `import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+<Select defaultValue="pro">
+  <SelectTrigger className="w-full">
+    <SelectValue placeholder="Selecione um plano" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="basic">Básico</SelectItem>
+    <SelectItem value="pro">Profissional</SelectItem>
+    <SelectItem value="enterprise">Enterprise</SelectItem>
+  </SelectContent>
+</Select>`,
+  },
+  {
+    id: "dropdown",
+    label: "Dropdown",
+    eyebrow: "menu contextual",
+    description: "Agrupa ações secundárias sem poluir a tela principal com muitos botões.",
+    useCase: "É muito usado em tabelas, cards de usuário e barras de ações com comandos extras.",
+    code: `import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+
+<DropdownMenu>
+  <DropdownMenuTrigger asChild>
+    <Button variant="outline">Ações</Button>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent align="end">
+    <DropdownMenuItem>Editar perfil</DropdownMenuItem>
+    <DropdownMenuItem>Duplicar acesso</DropdownMenuItem>
+    <DropdownMenuItem>Desativar conta</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>`,
+  },
+  {
+    id: "tabs",
+    label: "Tabs",
+    eyebrow: "troca de contexto",
+    description: "Separa áreas de conteúdo em seções rápidas sem sair da mesma tela.",
+    useCase: "É uma boa solução quando a página tem vários blocos relacionados, mas não cabe tudo ao mesmo tempo.",
+    code: `import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+<Tabs className="w-full" defaultValue="overview">
+  <TabsList className="grid w-full grid-cols-3">
+    <TabsTrigger value="overview">Visão geral</TabsTrigger>
+    <TabsTrigger value="reports">Relatórios</TabsTrigger>
+    <TabsTrigger value="team">Equipe</TabsTrigger>
+  </TabsList>
+  <TabsContent className="rounded-md border p-4 text-sm" value="overview">
+    Resumo geral da tela
+  </TabsContent>
+  <TabsContent className="rounded-md border p-4 text-sm" value="reports">
+    Indicadores e relatórios
+  </TabsContent>
+  <TabsContent className="rounded-md border p-4 text-sm" value="team">
+    Membros e permissões
+  </TabsContent>
+</Tabs>`,
+  },
+  {
+    id: "form",
+    label: "Form",
+    eyebrow: "validação",
+    description: "Combina campos, mensagens e validação em uma estrutura mais previsível.",
+    useCase: "Ajuda bastante quando a tela precisa de feedback claro para cadastro, edição e onboarding.",
+    code: `import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+<form className="space-y-4">
+  <div className="space-y-2">
+    <Label htmlFor="preview-email">E-mail</Label>
+    <Input id="preview-email" placeholder="voce@empresa.com" />
+  </div>
+  <div className="flex items-center gap-3">
+    <Checkbox id="preview-terms" />
+    <Label htmlFor="preview-terms">Aceito os termos</Label>
+  </div>
+  <Button className="w-full">Criar conta</Button>
+</form>`,
+  },
+  {
+    id: "toast",
+    label: "Toast / Sonner",
+    eyebrow: "feedback imediato",
+    description: "Exibe sucesso, erro e avisos curtos sem tirar o usuário do fluxo atual.",
+    useCase: "Ótimo para confirmar ações rápidas como salvar, copiar, excluir ou atualizar algo.",
+    code: `import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+
+<Button onClick={() => toast.success("Usuário salvo com sucesso")}>
+  Mostrar toast
+</Button>`,
+  },
+];
+
+const mainComponents = componentShowcases.map((item) => item.label);
+
 function CodeBlock({ className, code, copyText = code }) {
   async function handleCopy() {
     try {
@@ -289,13 +503,175 @@ function SlideShell({ slide, children }) {
   );
 }
 
+function ComponentSnippetCard({ label, code }) {
+  return (
+    <div className="h-full overflow-hidden rounded-[24px] border border-white/10 bg-[#09120f] shadow-inner">
+      <div className="flex items-center justify-between gap-3 border-b border-white/10 px-5 py-4">
+        <div className="flex items-center gap-2">
+          <span className="h-2.5 w-2.5 rounded-full bg-rose-300" />
+          <span className="h-2.5 w-2.5 rounded-full bg-amber-200" />
+          <span className="h-2.5 w-2.5 rounded-full bg-emerald-300" />
+        </div>
+        <Badge className="bg-white/8 text-white" variant="outline">
+          {label}
+        </Badge>
+      </div>
+      <pre className="overflow-x-auto p-5 text-sm leading-7 text-emerald-50 md:text-[0.95rem]">
+        <code>{code}</code>
+      </pre>
+    </div>
+  );
+}
+
+function ComponentPreview({ showcaseId }) {
+  switch (showcaseId) {
+    case "button":
+      return (
+        <Button variant="outline">Ver detalhes</Button>
+      );
+    case "input":
+      return <Input placeholder="voce@empresa.com" type="email" />;
+    case "card":
+      return (
+        <Card className="w-full max-w-sm">
+          <CardHeader>
+            <CardTitle>Plano Pro</CardTitle>
+            <CardDescription>Mais usado em dashboards</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p>Inclui métricas, formulários e tabelas.</p>
+          </CardContent>
+        </Card>
+      );
+    case "dialog":
+      return (
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline">Abrir dialog</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Editar perfil</DialogTitle>
+              <DialogDescription>Atualize as informações e salve as alterações.</DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button>Salvar alterações</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      );
+    case "table":
+      return (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Nome</TableHead>
+              <TableHead>Cargo</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>Ana Souza</TableCell>
+              <TableCell>Front-end</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      );
+    case "select":
+      return (
+        <Select defaultValue="pro">
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Selecione um plano" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="basic">Básico</SelectItem>
+            <SelectItem value="pro">Profissional</SelectItem>
+            <SelectItem value="enterprise">Enterprise</SelectItem>
+          </SelectContent>
+        </Select>
+      );
+    case "dropdown":
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">Ações</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>Editar perfil</DropdownMenuItem>
+            <DropdownMenuItem>Duplicar acesso</DropdownMenuItem>
+            <DropdownMenuItem>Desativar conta</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    case "tabs":
+      return (
+        <Tabs className="w-full" defaultValue="overview">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="overview">Visão geral</TabsTrigger>
+            <TabsTrigger value="reports">Relatórios</TabsTrigger>
+            <TabsTrigger value="team">Equipe</TabsTrigger>
+          </TabsList>
+          <TabsContent value="overview" className="rounded-md border p-4 text-sm">
+            Resumo geral da tela
+          </TabsContent>
+          <TabsContent value="reports" className="rounded-md border p-4 text-sm">
+            Indicadores e relatórios
+          </TabsContent>
+          <TabsContent value="team" className="rounded-md border p-4 text-sm">
+            Membros e permissões
+          </TabsContent>
+        </Tabs>
+      );
+    case "form":
+      return (
+        <form className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="preview-email">E-mail</Label>
+            <Input id="preview-email" placeholder="voce@empresa.com" />
+          </div>
+          <div className="flex items-center gap-3">
+            <Checkbox id="preview-terms" />
+            <Label htmlFor="preview-terms">Aceito os termos</Label>
+          </div>
+          <Button className="w-full">Criar conta</Button>
+        </form>
+      );
+    case "toast":
+      return (
+        <Button onClick={() => toast.success("Usuário salvo com sucesso")}>Mostrar toast</Button>
+      );
+    default:
+      return null;
+  }
+}
+
 export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, slide }) {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginMessage, setLoginMessage] = useState("Demo funcional com o fluxo representado em React.");
   const [variant, setVariant] = useState("default");
   const [activeSetupCommand, setActiveSetupCommand] = useState(setupCommandCards[0].id);
+  const [componentsCarouselApi, setComponentsCarouselApi] = useState(null);
+  const [activeMainComponent, setActiveMainComponent] = useState(0);
 
   const activeSetupCard = setupCommandCards.find((item) => item.id === activeSetupCommand) ?? setupCommandCards[0];
+  const activeShowcase = componentShowcases[activeMainComponent] ?? componentShowcases[0];
+
+  useEffect(() => {
+    if (!componentsCarouselApi) return;
+
+    const syncSelectedSlide = () => {
+      setActiveMainComponent(componentsCarouselApi.selectedScrollSnap());
+    };
+
+    syncSelectedSlide();
+    componentsCarouselApi.on("select", syncSelectedSlide);
+    componentsCarouselApi.on("reInit", syncSelectedSlide);
+
+    return () => {
+      componentsCarouselApi.off("select", syncSelectedSlide);
+      componentsCarouselApi.off("reInit", syncSelectedSlide);
+    };
+  }, [componentsCarouselApi]);
 
   function runLoginDemo() {
     if (!loginEmail) {
@@ -778,42 +1154,82 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
       return (
         <SlideShell slide={slide}>
           <Card>
-            <CardHeader>
-              <CardTitle className="text-4xl tracking-[-0.05em] md:text-5xl">Componentes principais</CardTitle>
-              <CardDescription className="text-base md:text-lg">
-                Eles cobrem boa parte das telas comuns de sistemas web, como login, dashboard, cadastro, listagem e formulário.
-              </CardDescription>
+            <CardHeader className="gap-5">
+              <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+                <div className="max-w-4xl space-y-2">
+                  <CardTitle className="text-4xl tracking-[-0.05em] md:text-5xl">Componentes principais</CardTitle>
+                  <CardDescription className="text-base md:text-lg">
+                    Cada label agora vira uma face do carrossel: à esquerda um snippet do componente e à direita a versão visual dele.
+                  </CardDescription>
+                </div>
+                <div className="rounded-full border border-[var(--border)] bg-[var(--surface-2)] px-4 py-2 text-sm font-medium text-[var(--muted)]">
+                  {String(activeMainComponent + 1).padStart(2, "0")} / {String(componentShowcases.length).padStart(2, "0")}
+                </div>
+              </div>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex flex-wrap gap-3">
-                {mainComponents.map((item) => (
-                  <Badge key={item} variant="outline">
+                {mainComponents.map((item, index) => (
+                  <button
+                    className={cn(
+                      "rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] transition-colors",
+                      index === activeMainComponent
+                        ? "border-transparent bg-emerald-400 text-emerald-950"
+                        : "border-[var(--border)] bg-transparent text-foreground hover:bg-[var(--surface-2)]",
+                    )}
+                    key={item}
+                    onClick={() => componentsCarouselApi?.scrollTo(index)}
+                    type="button"
+                  >
                     {item}
-                  </Badge>
+                  </button>
                 ))}
               </div>
-              <div className="grid gap-5 lg:grid-cols-2">
-                <Card className="bg-[var(--surface-2)] shadow-none">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-3 text-2xl">
-                      <LayoutDashboard className="size-5" />
-                      Demo de UI
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4 text-[var(--muted)]">
-                    <p>Esses componentes aparecem em praticamente qualquer sistema: da tela de login ao painel administrativo.</p>
-                    <Button onClick={() => toast.success("Toast exibido com sucesso")}>Mostrar toast</Button>
-                  </CardContent>
-                </Card>
-                <Card className="bg-[var(--surface-2)] shadow-none">
-                  <CardHeader>
-                    <CardTitle className="text-2xl">Vantagem prática</CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-[var(--muted)]">
-                    Você começa com uma base visual e funcional já organizada, em vez de repetir o mesmo trabalho em cada tela.
-                  </CardContent>
-                </Card>
-              </div>
+              <PresentationCarousel className="w-full" opts={{ align: "start" }} setApi={setComponentsCarouselApi}>
+                <PresentationCarouselContent>
+                  {componentShowcases.map((item, index) => (
+                    <PresentationCarouselItem key={item.id}>
+                      <div className="grid gap-5 xl:grid-cols-[0.96fr_1.04fr]">
+                        <ComponentSnippetCard code={item.code} label={item.label} />
+                        <Card className="h-full bg-[var(--surface-2)] shadow-none">
+                          <CardHeader className="gap-4 border-b border-[var(--border)]">
+                            <div className="flex flex-wrap items-start justify-between gap-4">
+                              <div className="space-y-2">
+                                <span className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-emerald-600">
+                                  {item.eyebrow}
+                                </span>
+                                <CardTitle className="text-2xl md:text-[2rem]">{item.label}</CardTitle>
+                              </div>
+                              <div className="rounded-full border border-[var(--border)] bg-background px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                                Face {String(index + 1).padStart(2, "0")}
+                              </div>
+                            </div>
+                            <CardDescription className="text-base leading-7">{item.description}</CardDescription>
+                          </CardHeader>
+                          <CardContent className="grid h-full gap-5 p-6">
+                            <div className="rounded-[24px] border border-[var(--border)] bg-background p-4">
+                              <ComponentPreview showcaseId={item.id} />
+                            </div>
+                            <p className="text-sm leading-7 text-[var(--muted)]">{item.useCase}</p>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </PresentationCarouselItem>
+                  ))}
+                </PresentationCarouselContent>
+                <div className="mt-5 flex flex-col gap-4 border-t border-[var(--border)] pt-5 md:flex-row md:items-center md:justify-between">
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-foreground">{activeShowcase.label}</p>
+                    <p className="text-sm text-[var(--muted)]">
+                      Use os labels acima ou as setas para navegar pelos componentes básicos do ecossistema Shadcn.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <PresentationCarouselPrevious className="static left-auto top-auto translate-y-0" />
+                    <PresentationCarouselNext className="static right-auto top-auto translate-y-0" />
+                  </div>
+                </div>
+              </PresentationCarousel>
             </CardContent>
           </Card>
         </SlideShell>
