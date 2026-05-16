@@ -4,7 +4,7 @@ import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
@@ -57,7 +57,7 @@ const techStack = [
     name: "Radix UI",
     role: "comportamento",
     stage: 3,
-    description: "Base acessível para componentes interativos como Dialog, Select e Dropdown.",
+    description: "Base de omponentes interativos como Dialog, Select e Dropdown.",
     example: "Dialog, Select, Popover",
   },
   {
@@ -503,7 +503,12 @@ function CodeBlock({ className, code, copyText = code }) {
         <span className="h-2.5 w-2.5 rounded-full bg-amber-200" />
         <span className="h-2.5 w-2.5 rounded-full bg-emerald-300" />
       </div>
-      <Button className="absolute right-4 top-3 h-9 rounded-full px-3" size="sm" variant="ghost" onClick={handleCopy}>
+      <Button
+        className="absolute right-4 top-3 h-9 rounded-full px-3 text-emerald-50 hover:bg-white/8 hover:text-emerald-50"
+        size="sm"
+        variant="ghost"
+        onClick={handleCopy}
+      >
         <Copy className="size-4" />
         Copiar
       </Button>
@@ -752,7 +757,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
                   Uma coleção de componentes para React muito usada com Next.js, Vite e Tailwind CSS.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-5 text-base leading-7 text-[var(--muted)] md:text-lg">
+              <CardContent className="space-y-5 text-base leading-7 text-[var(--muted-foreground)] md:text-lg">
                 <p>O ponto mais importante é que ele não funciona como uma biblioteca tradicional escondida no projeto.</p>
                 <p>Quando você adiciona um componente, o código entra na base da aplicação e passa a ser responsabilidade da equipe.</p>
                 <div className="rounded-[24px] border border-[var(--border)] bg-[var(--surface-2)] p-5 text-foreground">
@@ -785,12 +790,11 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
           </CardTitle>
 
           <CardDescription className="text-sm md:text-base">
-            Todo sistema repete os mesmos blocos de interface. O problema começa quando
-            cada tela recria esses blocos sem uma base comum.
+  
           </CardDescription>
         </CardHeader>
 
-        <CardContent className="space-y-5">
+        <CardContent className="space-y-5 h-full">
           <div className="grid gap-4 lg:grid-cols-[0.9fr_1fr_1fr]">
             <FlipCard
               back={
@@ -802,13 +806,13 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
                     </CardDescription>
                   </CardHeader>
 
-                  <CardContent className="space-y-1.5 px-5 pb-4 text-[15px] leading-4">
+                  <CardContent className="space-y-1.5 px-3 pb-4 text-[30px] leading-10">
                     {manualComponentSteps.map((step, index) => (
                       <div
                         className="flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5"
                         key={step}
                       >
-                        <span className="grid size-4 shrink-0 place-items-center rounded-full bg-emerald-400 text-[10px] font-semibold text-emerald-950">
+                        <span className="grid size-4 shrink-0 place-items-center rounded-full bg-emerald-400 text-[10px] leading-none font-semibold text-emerald-950">
                           {index + 1}
                         </span>
                         <span>{step}</span>
@@ -817,7 +821,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
                   </CardContent>
                 </Card>
               }
-              className="h-[330px]"
+              className="h-[600px]"
               flipped={case3VisibleCards >= 1}
               front={
                 <Card className="grid h-full place-items-center overflow-hidden bg-[var(--surface-2)] p-5 text-center text-foreground shadow-none">
@@ -838,8 +842,8 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
                     </CardDescription>
                   </CardHeader>
 
-                  <CardContent className="space-y-2 px-5 pb-5 text-xs leading-5">
-                    <div className="rounded-xl bg-rose-950/10 px-3 py-2 font-mono text-xs">
+                  <CardContent className="space-y-1.5 px-3 pb-4 text-[30px] leading-10">
+                    <div className="rounded-xl bg-rose-950/10 px-3 py-2 font-mono text-[30px]">
                       Button ≠ Button ≠ Button
                     </div>
 
@@ -850,14 +854,13 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
                         </div>
                       ))}
                     </div>
-
-                    <p className="pt-1">
-                      A interface funciona, mas fica mais difícil evoluir sem quebrar padrão.
-                    </p>
                   </CardContent>
+                  <CardFooter className="pt-1 text-lg font-semibold">
+                      A interface funciona, mas fica mais difícil evoluir sem quebrar padrão.
+                    </CardFooter>
                 </Card>
               }
-              className="h-[330px]"
+              className="h-[600px]"
               flipped={case3VisibleCards >= 2}
               front={
                 <Card className="grid h-full place-items-center overflow-hidden bg-rose-300/92 p-5 text-center text-rose-950 shadow-none">
@@ -878,8 +881,8 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
                     </CardDescription>
                   </CardHeader>
 
-                  <CardContent className="space-y-2 px-5 pb-5 text-xs leading-5">
-                    <div className="rounded-xl bg-emerald-950/10 px-3 py-2 font-mono text-xs">
+                  <CardContent className="space-y-1.5 px-3 pb-4 text-[30px] leading-10">
+                    <div className="rounded-xl bg-emerald-950/10 px-3 py-2 font-mono text-[30px]">
                       npx shadcn@latest add button
                     </div>
 
@@ -890,14 +893,11 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
                         </div>
                       ))}
                     </div>
-
-                    <p className="pt-1 font-semibold">
-                      Menos repetição. Mais padrão. Mais controle.
-                    </p>
                   </CardContent>
+                   <CardFooter className="text-lg font-semibold">Menos repetição. Mais padrão. Mais controle.</CardFooter>
                 </Card>
               }
-              className="h-[330px]"
+              className="h-[600px]"
               flipped={case3VisibleCards >= 3}
               front={
                 <Card className="grid h-full place-items-center overflow-hidden bg-emerald-400/90 p-5 text-center text-emerald-950 shadow-none">
@@ -909,10 +909,9 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
             />
           </div>
 
-          <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface-2)] p-4 text-sm leading-6 text-[var(--muted)]">
+          <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface-2)] p-4 text-[20px] leading-6 text-[var(--muted-foreground)]">
             <strong className="text-foreground">Ideia central:</strong>{" "}
-            o shadcn/ui não resolve a regra de negócio. Ele reduz o trabalho repetitivo
-            da interface, entregando uma base visual pronta para o desenvolvedor adaptar.
+            o shadcn/ui não resolve a regra de negócio. Ele reduz o trabalho repetitivo da interface, entregando uma base visual pronta para o desenvolvedor adaptar.
           </div>
         </CardContent>
       </Card>
@@ -938,7 +937,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
                     <div className="grid size-10 shrink-0 place-items-center rounded-full bg-emerald-400 font-semibold text-emerald-950">
                       {index + 1}
                     </div>
-                    <p className="text-base leading-7 text-[var(--muted)] md:text-lg">{step}</p>
+                    <p className="text-base leading-7 text-[var(--muted-foreground)] md:text-lg">{step}</p>
                   </div>
                 ))}
               </CardContent>
@@ -969,17 +968,17 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
                       <Card className="h-full overflow-hidden bg-[var(--surface-2)] shadow-none">
                         <CardHeader className="p-5 pb-3">
                           <div className="flex items-center justify-between gap-3">
-                            <CardTitle className="text-xl">{tech.name}</CardTitle>
+                            <CardTitle className="text-[20px]">{tech.name}</CardTitle>
                             <Badge variant="muted">{tech.role}</Badge>
                           </div>
                         </CardHeader>
 
                         <CardContent className="space-y-3 px-5 pb-5">
-                          <p className="text-sm leading-6 text-[var(--muted)]">
+                          <p className="text-lg leading-7 text-[var(--muted-foreground)]">
                             {tech.description}
                           </p>
 
-                          <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 font-mono text-xs text-[var(--muted)]">
+                          <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 font-mono text-xs text-[var(--muted-foreground)]">
                             {tech.example}
                           </div>
                         </CardContent>
@@ -1009,7 +1008,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
                       <CardTitle className="text-xl">Como as peças se encaixam</CardTitle>
                     </CardHeader>
 
-                    <CardContent className="space-y-3 px-5 pb-5 text-sm leading-6 text-[var(--muted)]">
+                    <CardContent className="space-y-3 px-5 pb-5 text-[20px] leading-6 text-[var(--muted-foreground)]">
                       {stackCompositionSteps.map((step) => (
                         <div className="rounded-xl bg-[var(--surface)] px-4 py-3" key={step}>
                           {step}
@@ -1033,7 +1032,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
               />
 
               <FlipCard
-                back={<CodeBlock className="h-full" code={stackCompositionSnippet} />}
+                back={<CodeBlock className="h-full " code={stackCompositionSnippet} />}
                 className="h-[370px]"
                 flipped={case5VisibleStages >= 7}
                 front={
@@ -1073,7 +1072,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
                   ["Shadcn/UI", "Copia o código para o projeto", "Alto"],
                 ].map(([name, model, control]) => (
                   <div
-                    className={`grid grid-cols-3 px-6 py-5 text-base ${name === "Shadcn/UI" ? "bg-emerald-400/90 font-semibold text-emerald-950" : "bg-[var(--surface)] text-[var(--muted)]"}`}
+                    className={`grid grid-cols-3 px-6 py-5 text-base ${name === "Shadcn/UI" ? "bg-emerald-400/90 font-semibold text-emerald-950" : "bg-[var(--surface)] text-[var(--muted-foreground)]"}`}
                     key={name}
                   >
                     <span className={name === "Shadcn/UI" ? "text-emerald-950" : "text-foreground"}>{name}</span>
@@ -1082,7 +1081,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
                   </div>
                 ))}
               </div>
-              <div className="rounded-[24px] border border-[var(--border)] bg-[var(--surface-2)] p-5 text-base leading-7 text-[var(--muted)] md:text-lg">
+              <div className="rounded-[24px] border border-[var(--border)] bg-[var(--surface-2)] p-5 text-base leading-7 text-[var(--muted-foreground)] md:text-lg">
                 No Bootstrap e no Material UI, o projeto consome uma biblioteca. No Shadcn, o projeto recebe o código do componente e pode alterar diretamente.
               </div>
             </CardContent>
@@ -1108,17 +1107,17 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
                           "h-auto items-start justify-between rounded-[24px] border px-4 py-4 text-left transition-all md:px-5",
                           isActive
                             ? "border-emerald-300/35 bg-emerald-300/10 text-foreground shadow-[0_0_0_1px_rgba(110,231,183,0.18)]"
-                            : "border-[var(--border)] bg-[var(--surface-2)] text-[var(--muted)] hover:bg-[var(--surface)]",
+                            : "border-[var(--border)] bg-[var(--surface-2)] text-[var(--muted-foreground)] hover:bg-[var(--surface)]",
                         )}
                         key={item.id}
                         onClick={() => setActiveSetupCommand(item.id)}
                         variant="ghost"
                       >
                         <div className="grid gap-2">
-                          <span className="text-[0.68rem] uppercase tracking-[0.28em] text-emerald-300/80">Passo 0{index + 1}</span>
-                          <code className="font-mono text-sm text-current md:text-base">{item.command}</code>
+                          <span className="text-[0.80rem] uppercase tracking-[0.28em] text-current opacity-70">Passo 0{index + 1}</span>
+                          <code className="font-mono text-lg text-current md:text-[20px] font-bold ">{item.command}</code>
                         </div>
-                        <div className="flex items-center gap-2 pl-4 text-[0.68rem] uppercase tracking-[0.24em] text-emerald-100/70">
+                        <div className="flex items-center gap-2 pl-4 text-[0.68rem] uppercase tracking-[0.24em] text-current opacity-70">
                           <span>{isActive ? "ativo" : item.eyebrow}</span>
                           <ChevronRight className={cn("size-4 transition-transform", isActive && "translate-x-1")} />
                         </div>
@@ -1175,7 +1174,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
                 <div className="max-w-4xl space-y-2">
                   <CardTitle className="text-4xl tracking-[-0.05em] md:text-5xl">Componentes principais</CardTitle>
                 </div>
-                <div className="rounded-full border border-[var(--border)] bg-[var(--surface-2)] px-4 py-2 text-sm font-medium text-[var(--muted)]">
+                <div className="rounded-full border border-[var(--border)] bg-[var(--surface-2)] px-4 py-2 text-sm font-medium text-[var(--muted-foreground)]">
                   {String(activeMainComponent + 1).padStart(2, "0")} / {String(componentShowcases.length).padStart(2, "0")}
                 </div>
               </div>
@@ -1205,7 +1204,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
                       <div className="grid gap-5 xl:grid-cols-[0.96fr_1.04fr]">
                         <ComponentSnippetCard code={item.code} label={item.label} />
                         <Card className="h-full bg-[var(--surface-2)] shadow-none">
-                          <CardHeader className="gap-4 border-b border-[var(--border)]">
+                          <CardHeader className="gap-1 border-b border-[var(--border)]">
                             <div className="flex flex-wrap items-start justify-between gap-4">
                               <div className="space-y-2">
                                 <span className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-emerald-600">
@@ -1213,17 +1212,17 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
                                 </span>
                                 <CardTitle className="text-2xl md:text-[2rem]">{item.label}</CardTitle>
                               </div>
-                              <div className="rounded-full border border-[var(--border)] bg-background px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                              <div className="rounded-full border border-[var(--border)] bg-background px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted-foreground)]">
                                 Face {String(index + 1).padStart(2, "0")}
                               </div>
                             </div>
                             <CardDescription className="text-base leading-7">{item.description}</CardDescription>
                           </CardHeader>
-                          <CardContent className="grid h-full gap-5 p-6">
+                          <CardContent className="grid h-[50%] gap-5 p-6">
                             <div className="rounded-[24px] border border-[var(--border)] bg-background p-4">
                               <ComponentPreview showcaseId={item.id} />
                             </div>
-                            <p className="text-sm leading-7 text-[var(--muted)]">{item.useCase}</p>
+                            <p className="text-sm leading-7 text-[var(--muted-foreground)]">{item.useCase}</p>
                           </CardContent>
                         </Card>
                       </div>
@@ -1233,7 +1232,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
                 <div className="mt-5 flex flex-col gap-4 border-t border-[var(--border)] pt-5 md:flex-row md:items-center md:justify-between">
                   <div className="space-y-1">
                     <p className="text-sm font-medium text-foreground">{activeShowcase.label}</p>
-                    <p className="text-sm text-[var(--muted)]">
+                    <p className="text-sm text-[var(--muted-foreground)]">
                       Use os labels acima ou as setas para navegar pelos componentes básicos do ecossistema Shadcn.
                     </p>
                   </div>
@@ -1271,10 +1270,10 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
                     Secondary
                   </Button>
                 </div>
-                <div className="rounded-[24px] border border-[var(--border)] bg-[var(--surface-2)] p-5 text-base leading-7 text-[var(--muted)]">
+                <div className="rounded-[24px] border border-[var(--border)] bg-[var(--surface-2)] p-5 text-base leading-7 text-[var(--muted-foreground)]">
                   O botão selecionado representa a variante atual do componente: <strong className="text-foreground">{variant}</strong>
                 </div>
-                <div className="grid gap-2 text-[var(--muted)]">
+                <div className="grid gap-2 text-[var(--muted-foreground)]">
                   <p>Você pode mudar cor, tamanho, borda, variantes, classes Tailwind e comportamento visual.</p>
                   <p>Se o botão padrão do sistema mudar, basta ajustar <code>components/ui/button.tsx</code>.</p>
                 </div>
@@ -1309,7 +1308,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
                     Ideia: gerar dashboard
                   </Button>
                 </div>
-                <div className="grid gap-2 text-[var(--muted)]">
+                <div className="grid gap-2 text-[var(--muted-foreground)]">
                   <p>A IA pode ajudar a gerar telas rapidamente, montar protótipos, sugerir layouts e organizar componentes.</p>
                   <p>Ela acelera, mas não substitui revisão técnica.</p>
                 </div>
@@ -1337,7 +1336,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, c
                 <div className="rounded-[20px] border border-amber-300/30 bg-amber-200/60 p-4 text-amber-950">
                   <strong>Frase forte:</strong> IA acelera. O desenvolvedor valida.
                 </div>
-                <div className="rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-4 text-[var(--muted)]">
+                <div className="rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-4 text-[var(--muted-foreground)]">
                   Sem revisão, a IA só entrega um Frankenstein bonito em Tailwind.
                 </div>
               </CardContent>

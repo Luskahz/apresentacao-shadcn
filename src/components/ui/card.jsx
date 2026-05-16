@@ -21,7 +21,7 @@ function CardTitle({ className, ...props }) {
 }
 
 function CardDescription({ className, ...props }) {
-  return <p className={cn("text-sm text-[var(--muted)]", className)} {...props} />;
+  return <p className={cn("text-sm text-[var(--muted-foreground)]", className)} {...props} />;
 }
 
 function CardContent({ className, ...props }) {

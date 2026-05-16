@@ -140,7 +140,7 @@ function SlidePage() {
               <div className="presentation-mark small" />
               <div>
                 <h1 className="text-lg font-semibold tracking-tight">Shadcn/UI</h1>
-                <p className="text-sm text-[var(--muted)]">React + Shadcn + rotas por slide</p>
+                <p className="text-sm text-[var(--muted-foreground)]">React + Shadcn + rotas por slide</p>
               </div>
             </div>
           </div>
@@ -208,7 +208,7 @@ function SlidePage() {
                 <ChevronLeft className="size-4" />
                 Anterior
               </Button>
-              <div className="hidden text-sm text-[var(--muted)] md:block">{currentSlide.title}</div>
+              <div className="hidden text-sm text-[var(--muted-foreground)] md:block">{currentSlide.title}</div>
               <Button disabled={currentSlide.id === slides.length} onClick={goNext}>
                 Próximo
                 <ChevronRight className="size-4" />
