@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { FlipCard } from "@/components/ui/flip-card";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../ui/carousel";
 import { cn } from "@/lib/utils";
 
 const techStack = [
@@ -391,7 +392,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
     case 2:
       return (
         <SlideShell slide={slide}>
-          <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="grid gap-6 lg:grid-cols-2">
             <Card>
               <CardHeader>
                 <CardTitle className="text-4xl tracking-[-0.05em] md:text-5xl">O que é Shadcn/UI?</CardTitle>
@@ -407,174 +408,191 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                 </div>
               </CardContent>
             </Card>
-            <div className="grid gap-6">
+            <div className="flex flex-col">
               <CodeBlock code={`npx shadcn@latest add button\n\ncomponents/ui/button.tsx`} />
-              <Card className="bg-[#0d1110] text-emerald-50">
-                <CardContent className="flex flex-wrap gap-3 p-6">
-                  {["React", "Next.js", "Vite", "Tailwind CSS"].map((item) => (
-                    <Badge className="bg-white/8 text-white" key={item}>
-                      {item}
-                    </Badge>
-                  ))}
-                </CardContent>
-              </Card>
+              <div className="w-[90%] flex justify-center flex-col">
+                <CardHeader>
+                  <CardTitle className=" text-left text-2xl tracking-[-0.05em]">Stacks</CardTitle>
+
+                </CardHeader>
+                <div className="flex justify-center">
+                  <Carousel
+                    className="w-full"
+                  
+                  >
+                    <CarouselContent>
+                      <CarouselItem>oi</CarouselItem>
+                      <CarouselItem>oi2</CarouselItem>
+                      <CarouselItem>oi3</CarouselItem>
+                    </CarouselContent>
+                    <CarouselPrevious className={"bg-white"} />
+                    <CarouselNext />
+                  </Carousel>
+
+
+                </div>
+
+
+              </div>
+
+
             </div>
           </div>
         </SlideShell>
       );
-      case 3:
-  return (
-    <SlideShell slide={slide}>
-      <Card>
-        <CardHeader className="max-w-5xl pb-4">
-          <CardTitle className="text-3xl tracking-[-0.05em] md:text-4xl">
-            Problema das interfaces repetitivas
-          </CardTitle>
+    case 3:
+      return (
+        <SlideShell slide={slide}>
+          <Card>
+            <CardHeader className="max-w-5xl pb-4">
+              <CardTitle className="text-3xl tracking-[-0.05em] md:text-4xl">
+                Problema das interfaces repetitivas
+              </CardTitle>
 
-          <CardDescription className="text-sm md:text-base">
-            Todo sistema repete os mesmos blocos de interface. O problema começa quando
-            cada tela recria esses blocos sem uma base comum.
-          </CardDescription>
-        </CardHeader>
+              <CardDescription className="text-sm md:text-base">
+                Todo sistema repete os mesmos blocos de interface. O problema começa quando
+                cada tela recria esses blocos sem uma base comum.
+              </CardDescription>
+            </CardHeader>
 
-        <CardContent className="space-y-5">
-          <div className="flex flex-wrap gap-2">
-            {repeatedInterfaceBlocks.map((item) => (
-              <Badge key={item} variant="muted">
-                {item}
-              </Badge>
-            ))}
-          </div>
+            <CardContent className="space-y-5">
+              <div className="flex flex-wrap gap-2">
+                {repeatedInterfaceBlocks.map((item) => (
+                  <Badge key={item} variant="muted">
+                    {item}
+                  </Badge>
+                ))}
+              </div>
 
-          <div className="grid gap-4 lg:grid-cols-[0.9fr_1fr_1fr]">
-            <FlipCard
-              back={
-                <Card className="h-full overflow-hidden bg-[var(--surface-2)] text-foreground shadow-none">
-                  <CardHeader className="p-5 pb-2">
-                    <CardTitle className="text-lg">Fluxo comum</CardTitle>
-                    <CardDescription className="text-xs leading-5">
-                      O trabalho repetitivo antes de criar a regra real da tela.
-                    </CardDescription>
-                  </CardHeader>
+              <div className="grid gap-4 lg:grid-cols-[0.9fr_1fr_1fr]">
+                <FlipCard
+                  back={
+                    <Card className="h-full overflow-hidden bg-[var(--surface-2)] text-foreground shadow-none">
+                      <CardHeader className="p-5 pb-2">
+                        <CardTitle className="text-lg">Fluxo comum</CardTitle>
+                        <CardDescription className="text-xs leading-5">
+                          O trabalho repetitivo antes de criar a regra real da tela.
+                        </CardDescription>
+                      </CardHeader>
 
-                  <CardContent className="space-y-1.5 px-5 pb-4 text-[15px] leading-4">
-                    {manualComponentSteps.map((step, index) => (
-                      <div
-                        className="flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5"
-                        key={step}
-                      >
-                        <span className="grid size-4 shrink-0 place-items-center rounded-full bg-emerald-400 text-[10px] font-semibold text-emerald-950">
-                          {index + 1}
-                        </span>
-                        <span>{step}</span>
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
-              }
-              className="h-[330px]"
-              flipped={case3VisibleCards >= 1}
-              front={
-                <Card className="grid h-full place-items-center overflow-hidden bg-[var(--surface-2)] p-5 text-center text-foreground shadow-none">
-                  <CardTitle className="text-2xl tracking-[-0.04em] md:text-3xl">
-                    Fluxo comum
-                  </CardTitle>
-                </Card>
-              }
-            />
+                      <CardContent className="space-y-1.5 px-5 pb-4 text-[15px] leading-4">
+                        {manualComponentSteps.map((step, index) => (
+                          <div
+                            className="flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5"
+                            key={step}
+                          >
+                            <span className="grid size-4 shrink-0 place-items-center rounded-full bg-emerald-400 text-[10px] font-semibold text-emerald-950">
+                              {index + 1}
+                            </span>
+                            <span>{step}</span>
+                          </div>
+                        ))}
+                      </CardContent>
+                    </Card>
+                  }
+                  className="h-[330px]"
+                  flipped={case3VisibleCards >= 1}
+                  front={
+                    <Card className="grid h-full place-items-center overflow-hidden bg-[var(--surface-2)] p-5 text-center text-foreground shadow-none">
+                      <CardTitle className="text-2xl tracking-[-0.04em] md:text-3xl">
+                        Fluxo comum
+                      </CardTitle>
+                    </Card>
+                  }
+                />
 
-            <FlipCard
-              back={
-                <Card className="h-full overflow-hidden bg-rose-300/92 text-rose-950 shadow-none">
-                  <CardHeader className="p-5 pb-2">
-                    <CardTitle className="text-lg">Sem padronização</CardTitle>
-                    <CardDescription className="text-xs leading-5 text-rose-950/80">
-                      Cada componente nasce de um jeito.
-                    </CardDescription>
-                  </CardHeader>
+                <FlipCard
+                  back={
+                    <Card className="h-full overflow-hidden bg-rose-300/92 text-rose-950 shadow-none">
+                      <CardHeader className="p-5 pb-2">
+                        <CardTitle className="text-lg">Sem padronização</CardTitle>
+                        <CardDescription className="text-xs leading-5 text-rose-950/80">
+                          Cada componente nasce de um jeito.
+                        </CardDescription>
+                      </CardHeader>
 
-                  <CardContent className="space-y-2 px-5 pb-5 text-xs leading-5">
-                    <div className="rounded-xl bg-rose-950/10 px-3 py-2 font-mono text-xs">
-                      Button ≠ Button ≠ Button
-                    </div>
-
-                    <div className="grid gap-2">
-                      {noPatternProblems.map((problem) => (
-                        <div className="rounded-xl bg-rose-950/10 px-3 py-2" key={problem}>
-                          {problem}
+                      <CardContent className="space-y-2 px-5 pb-5 text-xs leading-5">
+                        <div className="rounded-xl bg-rose-950/10 px-3 py-2 font-mono text-xs">
+                          Button ≠ Button ≠ Button
                         </div>
-                      ))}
-                    </div>
 
-                    <p className="pt-1">
-                      A interface funciona, mas fica mais difícil evoluir sem quebrar padrão.
-                    </p>
-                  </CardContent>
-                </Card>
-              }
-              className="h-[330px]"
-              flipped={case3VisibleCards >= 2}
-              front={
-                <Card className="grid h-full place-items-center overflow-hidden bg-rose-300/92 p-5 text-center text-rose-950 shadow-none">
-                  <CardTitle className="text-2xl tracking-[-0.04em] md:text-3xl">
-                    Sem padronização
-                  </CardTitle>
-                </Card>
-              }
-            />
-
-            <FlipCard
-              back={
-                <Card className="h-full overflow-hidden bg-emerald-400/90 text-emerald-950 shadow-none">
-                  <CardHeader className="p-5 pb-2">
-                    <CardTitle className="text-lg">Com shadcn/ui</CardTitle>
-                    <CardDescription className="text-xs leading-5 text-emerald-950/80">
-                      Você parte de uma base pronta e editável.
-                    </CardDescription>
-                  </CardHeader>
-
-                  <CardContent className="space-y-2 px-5 pb-5 text-xs leading-5">
-                    <div className="rounded-xl bg-emerald-950/10 px-3 py-2 font-mono text-xs">
-                      npx shadcn@latest add button
-                    </div>
-
-                    <div className="grid gap-2">
-                      {shadcnBenefits.map((benefit) => (
-                        <div className="rounded-xl bg-emerald-950/10 px-3 py-2" key={benefit}>
-                          {benefit}
+                        <div className="grid gap-2">
+                          {noPatternProblems.map((problem) => (
+                            <div className="rounded-xl bg-rose-950/10 px-3 py-2" key={problem}>
+                              {problem}
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
 
-                    <p className="pt-1 font-semibold">
-                      Menos repetição. Mais padrão. Mais controle.
-                    </p>
-                  </CardContent>
-                </Card>
-              }
-              className="h-[330px]"
-              flipped={case3VisibleCards >= 3}
-              front={
-                <Card className="grid h-full place-items-center overflow-hidden bg-emerald-400/90 p-5 text-center text-emerald-950 shadow-none">
-                  <CardTitle className="text-2xl tracking-[-0.04em] md:text-3xl">
-                    Com shadcn
-                  </CardTitle>
-                </Card>
-              }
-            />
-          </div>
+                        <p className="pt-1">
+                          A interface funciona, mas fica mais difícil evoluir sem quebrar padrão.
+                        </p>
+                      </CardContent>
+                    </Card>
+                  }
+                  className="h-[330px]"
+                  flipped={case3VisibleCards >= 2}
+                  front={
+                    <Card className="grid h-full place-items-center overflow-hidden bg-rose-300/92 p-5 text-center text-rose-950 shadow-none">
+                      <CardTitle className="text-2xl tracking-[-0.04em] md:text-3xl">
+                        Sem padronização
+                      </CardTitle>
+                    </Card>
+                  }
+                />
 
-          <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface-2)] p-4 text-sm leading-6 text-[var(--muted)]">
-            <strong className="text-foreground">Ideia central:</strong>{" "}
-            o shadcn/ui não resolve a regra de negócio. Ele reduz o trabalho repetitivo
-            da interface, entregando uma base visual pronta para o desenvolvedor adaptar.
-          </div>
-        </CardContent>
-      </Card>
-    </SlideShell>
-  );
-  
-      case 4:
+                <FlipCard
+                  back={
+                    <Card className="h-full overflow-hidden bg-emerald-400/90 text-emerald-950 shadow-none">
+                      <CardHeader className="p-5 pb-2">
+                        <CardTitle className="text-lg">Com shadcn/ui</CardTitle>
+                        <CardDescription className="text-xs leading-5 text-emerald-950/80">
+                          Você parte de uma base pronta e editável.
+                        </CardDescription>
+                      </CardHeader>
+
+                      <CardContent className="space-y-2 px-5 pb-5 text-xs leading-5">
+                        <div className="rounded-xl bg-emerald-950/10 px-3 py-2 font-mono text-xs">
+                          npx shadcn@latest add button
+                        </div>
+
+                        <div className="grid gap-2">
+                          {shadcnBenefits.map((benefit) => (
+                            <div className="rounded-xl bg-emerald-950/10 px-3 py-2" key={benefit}>
+                              {benefit}
+                            </div>
+                          ))}
+                        </div>
+
+                        <p className="pt-1 font-semibold">
+                          Menos repetição. Mais padrão. Mais controle.
+                        </p>
+                      </CardContent>
+                    </Card>
+                  }
+                  className="h-[330px]"
+                  flipped={case3VisibleCards >= 3}
+                  front={
+                    <Card className="grid h-full place-items-center overflow-hidden bg-emerald-400/90 p-5 text-center text-emerald-950 shadow-none">
+                      <CardTitle className="text-2xl tracking-[-0.04em] md:text-3xl">
+                        Com shadcn
+                      </CardTitle>
+                    </Card>
+                  }
+                />
+              </div>
+
+              <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface-2)] p-4 text-sm leading-6 text-[var(--muted)]">
+                <strong className="text-foreground">Ideia central:</strong>{" "}
+                o shadcn/ui não resolve a regra de negócio. Ele reduz o trabalho repetitivo
+                da interface, entregando uma base visual pronta para o desenvolvedor adaptar.
+              </div>
+            </CardContent>
+          </Card>
+        </SlideShell>
+      );
+
+    case 4:
       return (
         <SlideShell slide={slide}>
           <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
@@ -604,115 +622,115 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
           </div>
         </SlideShell>
       );
-      case 5:
-  return (
-    <SlideShell slide={slide}>
-      <Card>
-        <CardHeader className="max-w-5xl pb-4">
-          <CardTitle className="text-3xl tracking-[-0.05em] md:text-4xl">
-            Tecnologias usadas
-          </CardTitle>
+    case 5:
+      return (
+        <SlideShell slide={slide}>
+          <Card>
+            <CardHeader className="max-w-5xl pb-4">
+              <CardTitle className="text-3xl tracking-[-0.05em] md:text-4xl">
+                Tecnologias usadas
+              </CardTitle>
 
-          <CardDescription className="text-sm md:text-base">
-            O shadcn/ui combina várias ferramentas. Cada uma resolve uma parte da interface:
-            estrutura, estilo, acessibilidade, variantes e instalação.
-          </CardDescription>
-        </CardHeader>
+              <CardDescription className="text-sm md:text-base">
+                O shadcn/ui combina várias ferramentas. Cada uma resolve uma parte da interface:
+                estrutura, estilo, acessibilidade, variantes e instalação.
+              </CardDescription>
+            </CardHeader>
 
-        <CardContent className="space-y-4">
-          <div className="grid gap-4">
-            {techRows.map((row, rowIndex) => (
-              <div className="grid gap-4 lg:grid-cols-3" key={rowIndex}>
-                {row.map((tech) => (
+            <CardContent className="space-y-4">
+              <div className="grid gap-4">
+                {techRows.map((row, rowIndex) => (
+                  <div className="grid gap-4 lg:grid-cols-3" key={rowIndex}>
+                    {row.map((tech) => (
+                      <FlipCard
+                        back={
+                          <Card className="h-full overflow-hidden bg-[var(--surface-2)] shadow-none">
+                            <CardHeader className="p-5 pb-3">
+                              <div className="flex items-center justify-between gap-3">
+                                <CardTitle className="text-xl">{tech.name}</CardTitle>
+                                <Badge variant="muted">{tech.role}</Badge>
+                              </div>
+                            </CardHeader>
+
+                            <CardContent className="space-y-3 px-5 pb-5">
+                              <p className="text-sm leading-6 text-[var(--muted)]">
+                                {tech.description}
+                              </p>
+
+                              <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 font-mono text-xs text-[var(--muted)]">
+                                {tech.example}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        }
+                        className="h-[250px]"
+                        flipped={case5VisibleStages >= tech.stage}
+                        front={
+                          <Card className="grid h-full place-items-center bg-[var(--surface-2)] p-5 text-center shadow-none">
+                            <div className="space-y-3">
+                              <Badge variant="outline">{tech.role}</Badge>
+                              <CardTitle className="text-2xl tracking-[-0.04em]">{tech.name}</CardTitle>
+                            </div>
+                          </Card>
+                        }
+                        key={tech.name}
+                      />
+                    ))}
+                  </div>
+                ))}
+
+                <div className="grid gap-4 lg:grid-cols-2">
                   <FlipCard
                     back={
                       <Card className="h-full overflow-hidden bg-[var(--surface-2)] shadow-none">
                         <CardHeader className="p-5 pb-3">
-                          <div className="flex items-center justify-between gap-3">
-                            <CardTitle className="text-xl">{tech.name}</CardTitle>
-                            <Badge variant="muted">{tech.role}</Badge>
-                          </div>
+                          <CardTitle className="text-xl">Como as peças se encaixam</CardTitle>
                         </CardHeader>
 
-                        <CardContent className="space-y-3 px-5 pb-5">
-                          <p className="text-sm leading-6 text-[var(--muted)]">
-                            {tech.description}
-                          </p>
-
-                          <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 font-mono text-xs text-[var(--muted)]">
-                            {tech.example}
-                          </div>
+                        <CardContent className="space-y-3 px-5 pb-5 text-sm leading-6 text-[var(--muted)]">
+                          {stackCompositionSteps.map((step) => (
+                            <div className="rounded-xl bg-[var(--surface)] px-4 py-3" key={step}>
+                              {step}
+                            </div>
+                          ))}
                         </CardContent>
                       </Card>
                     }
-                    className="h-[250px]"
-                    flipped={case5VisibleStages >= tech.stage}
+                    className="h-[320px]"
+                    flipped={case5VisibleStages >= 7}
                     front={
                       <Card className="grid h-full place-items-center bg-[var(--surface-2)] p-5 text-center shadow-none">
                         <div className="space-y-3">
-                          <Badge variant="outline">{tech.role}</Badge>
-                          <CardTitle className="text-2xl tracking-[-0.04em]">{tech.name}</CardTitle>
+                          <Badge variant="outline">Fluxo</Badge>
+                          <CardTitle className="text-2xl tracking-[-0.04em]">
+                            Como as peças se encaixam
+                          </CardTitle>
                         </div>
                       </Card>
                     }
-                    key={tech.name}
                   />
-                ))}
-              </div>
-            ))}
 
-            <div className="grid gap-4 lg:grid-cols-2">
-              <FlipCard
-                back={
-                  <Card className="h-full overflow-hidden bg-[var(--surface-2)] shadow-none">
-                    <CardHeader className="p-5 pb-3">
-                      <CardTitle className="text-xl">Como as peças se encaixam</CardTitle>
-                    </CardHeader>
-
-                    <CardContent className="space-y-3 px-5 pb-5 text-sm leading-6 text-[var(--muted)]">
-                      {stackCompositionSteps.map((step) => (
-                        <div className="rounded-xl bg-[var(--surface)] px-4 py-3" key={step}>
-                          {step}
+                  <FlipCard
+                    back={<CodeBlock className="h-full" code={stackCompositionSnippet} />}
+                    className="h-[320px]"
+                    flipped={case5VisibleStages >= 7}
+                    front={
+                      <Card className="grid h-full place-items-center border-white/10 bg-[#09120f] p-5 text-center text-emerald-50 shadow-none">
+                        <div className="space-y-3">
+                          <Badge className="border-white/10 bg-white/8 text-white">Código</Badge>
+                          <CardTitle className="text-2xl tracking-[-0.04em] text-emerald-50">
+                            Exemplo em código
+                          </CardTitle>
                         </div>
-                      ))}
-                    </CardContent>
-                  </Card>
-                }
-                className="h-[320px]"
-                flipped={case5VisibleStages >= 7}
-                front={
-                  <Card className="grid h-full place-items-center bg-[var(--surface-2)] p-5 text-center shadow-none">
-                    <div className="space-y-3">
-                      <Badge variant="outline">Fluxo</Badge>
-                      <CardTitle className="text-2xl tracking-[-0.04em]">
-                        Como as peças se encaixam
-                      </CardTitle>
-                    </div>
-                  </Card>
-                }
-              />
-
-              <FlipCard
-                back={<CodeBlock className="h-full" code={stackCompositionSnippet} />}
-                className="h-[320px]"
-                flipped={case5VisibleStages >= 7}
-                front={
-                  <Card className="grid h-full place-items-center border-white/10 bg-[#09120f] p-5 text-center text-emerald-50 shadow-none">
-                    <div className="space-y-3">
-                      <Badge className="border-white/10 bg-white/8 text-white">Código</Badge>
-                      <CardTitle className="text-2xl tracking-[-0.04em] text-emerald-50">
-                        Exemplo em código
-                      </CardTitle>
-                    </div>
-                  </Card>
-                }
-              />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </SlideShell>
-  );
+                      </Card>
+                    }
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </SlideShell>
+      );
     case 6:
       return (
         <SlideShell slide={slide}>

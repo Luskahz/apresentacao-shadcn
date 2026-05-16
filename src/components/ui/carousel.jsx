@@ -150,7 +150,7 @@ function CarouselPrevious({
   const { orientation, scrollPrev, canScrollPrev } = useCarousel()
 
   return (
-    <Button
+<Button
       data-slot="carousel-previous"
       variant={variant}
       size={size}
