@@ -1,15 +1,42 @@
-import { useState } from "react";
-import { Check, ChevronRight, Copy, LayoutDashboard, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Check, ChevronRight, Copy, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { FlipCard } from "@/components/ui/flip-card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Carousel as PresentationCarousel,
+  CarouselContent as PresentationCarouselContent,
+  CarouselItem as PresentationCarouselItem,
+  CarouselNext as PresentationCarouselNext,
+  CarouselPrevious as PresentationCarouselPrevious,
+} from "@/components/ui/presentation-carousel";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../ui/carousel";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
 const techStack = [
@@ -31,7 +58,7 @@ const techStack = [
     name: "Radix UI",
     role: "comportamento",
     stage: 3,
-    description: "Base acessível para componentes interativos como Dialog, Select e Dropdown.",
+    description: "Base de omponentes interativos como Dialog, Select e Dropdown.",
     example: "Dialog, Select, Popover",
   },
   {
@@ -58,9 +85,6 @@ const techStack = [
 ];
 
 const techRows = [techStack.slice(0, 3), techStack.slice(3, 6)];
-
-const mainComponents = ["Button", "Input", "Card", "Dialog", "Table", "Select", "Dropdown", "Tabs", "Form", "Toast / Sonner"];
-
 
 const repeatedInterfaceBlocks = [
   "Button",
@@ -93,6 +117,30 @@ const shadcnBenefits = [
   "código no projeto",
   "customização livre",
   "padrão visual",
+];
+
+const slide11Advantages = [
+  "rápido",
+  "moderno",
+  "bonito",
+  "customizável",
+  "acessível",
+  "bom para design system",
+  "funciona bem com IA",
+];
+
+const slide11Limitations = [
+  "exige React",
+  "exige Tailwind",
+  "manutenção fica com a equipe",
+  "pode virar bagunça sem padrão",
+  "não é ideal para quem só quer copiar sem entender",
+];
+
+const slide11GoodFit = [
+];
+
+const slide11Requirements = [
 ];
 
 const stackCompositionSteps = [
@@ -145,8 +193,6 @@ const setupCommandCards = [
     command: "npx shadcn@latest init",
     eyebrow: "base do projeto",
     title: "Prepara a estrutura inicial do Shadcn",
-    summary:
-      "Esse passo cria a base para o restante da CLI: pasta utilitária, pasta dos componentes e o arquivo de configuração do projeto.",
     console: `$ npx shadcn@latest init
 [ok] Checking project
 [ok] Detecting framework: Vite
@@ -167,17 +213,13 @@ const setupCommandCards = [
   lib/
     utils.js
   index.css
-components.json`,
-    example: `// Depois do init, a CLI já sabe onde criar componentes
-npx shadcn@latest add button`,
+components.json`
   },
   {
     id: "button",
     command: "npx shadcn@latest add button",
     eyebrow: "acao primaria",
     title: "Adiciona o componente Button ao projeto",
-    summary:
-      "A CLI copia o arquivo real do botão para dentro do projeto, com variantes e classes prontas para edição.",
     console: `$ npx shadcn@latest add button
 [ok] Checking registry
 [ok] Resolving dependencies
@@ -192,19 +234,12 @@ npx shadcn@latest add button`,
   components/
     ui/
       button.jsx`,
-    example: `import { Button } from "@/components/ui/button";
-
-export function Actions() {
-  return <Button>Salvar</Button>;
-}`,
   },
   {
     id: "card",
     command: "npx shadcn@latest add card",
     eyebrow: "bloco de conteudo",
     title: "Cria o componente Card para estruturar conteúdo",
-    summary:
-      "Esse comando adiciona um container pronto para títulos, descrição e conteúdo, ótimo para dashboards, login e resumos.",
     console: `$ npx shadcn@latest add card
 [ok] Checking registry
 [ok] Resolving dependencies
@@ -218,27 +253,13 @@ export function Actions() {
     structure: `src/
   components/
     ui/
-      card.jsx`,
-    example: `import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-export function SummaryCard() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Resumo</CardTitle>
-      </CardHeader>
-      <CardContent>Total de acessos</CardContent>
-    </Card>
-  );
-}`,
+      card.jsx`
   },
   {
     id: "input",
     command: "npx shadcn@latest add input",
     eyebrow: "entrada de dados",
     title: "Adiciona o Input para formulários",
-    summary:
-      "O comando cria um campo de entrada estilizado e consistente com o restante da interface, pronto para login, busca e cadastro.",
     console: `$ npx shadcn@latest add input
 [ok] Checking registry
 [ok] Resolving dependencies
@@ -252,20 +273,13 @@ export function SummaryCard() {
     structure: `src/
   components/
     ui/
-      input.jsx`,
-    example: `import { Input } from "@/components/ui/input";
-
-export function SearchField() {
-  return <Input placeholder="Buscar cliente" />;
-}`,
+      input.jsx`
   },
   {
     id: "dialog",
     command: "npx shadcn@latest add dialog",
     eyebrow: "modal interativa",
     title: "Cria o Dialog para modais e confirmações",
-    summary:
-      "Aqui entram os blocos de modal baseados em Radix UI, com estrutura acessível para abrir, fechar e organizar conteúdo.",
     console: `$ npx shadcn@latest add dialog
 [ok] Checking registry
 [ok] Resolving dependencies
@@ -279,22 +293,199 @@ export function SearchField() {
     structure: `src/
   components/
     ui/
-      dialog.jsx`,
-    example: `import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-
-export function ConfirmDialog() {
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button>Abrir modal</Button>
-      </DialogTrigger>
-      <DialogContent>Conteúdo do modal</DialogContent>
-    </Dialog>
-  );
-}`,
+      dialog.jsx`
   },
 ];
+
+const componentShowcases = [
+  {
+    id: "button",
+    label: "Button",
+    eyebrow: "ação primária",
+    description: "Botões prontos para salvar, confirmar, cancelar ou seguir fluxos da interface.",
+    useCase: "É um dos componentes mais usados do Shadcn porque já vem com variantes e estados visuais consistentes.",
+    code: `import { Button } from "@/components/ui/button";
+
+<Button variant="outline">Ver detalhes</Button>`,
+  },
+  {
+    id: "input",
+    label: "Input",
+    eyebrow: "entrada de dados",
+    description: "Campos de texto usados em login, filtros, buscas e formulários em geral.",
+    useCase: "Ajuda a manter o padrão visual dos campos sem precisar estilizar input por input.",
+    code: `import { Input } from "@/components/ui/input";
+
+<Input placeholder="voce@empresa.com" type="email" />`,
+  },
+  {
+    id: "card",
+    label: "Card",
+    eyebrow: "bloco de conteúdo",
+    description: "Organiza seções da tela como resumos, listas rápidas e painéis de dashboard.",
+    useCase: "É a base visual para agrupar informações com header, conteúdo e ações no mesmo padrão.",
+    code: `import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+<Card className="w-full max-w-sm">
+  <CardHeader>
+    <CardTitle>Plano Pro</CardTitle>
+    <CardDescription>Mais usado em dashboards</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <p>Inclui métricas, formulários e tabelas.</p>
+  </CardContent>
+</Card>`,
+  },
+  {
+    id: "dialog",
+    label: "Dialog",
+    eyebrow: "modal",
+    description: "Usado para confirmações, formulários rápidos, detalhes e ações críticas.",
+    useCase: "Como vem baseado em Radix, já entrega estrutura acessível para modais e overlays.",
+    code: `import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+
+<Dialog>
+  <DialogTrigger asChild>
+    <Button variant="outline">Abrir dialog</Button>
+  </DialogTrigger>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Editar perfil</DialogTitle>
+      <DialogDescription>Atualize as informações e salve as alterações.</DialogDescription>
+    </DialogHeader>
+    <DialogFooter>
+      <Button>Salvar alterações</Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>`,
+  },
+  {
+    id: "table",
+    label: "Table",
+    eyebrow: "listagem",
+    description: "Mostra dados tabulares como usuários, pedidos, relatórios e histórico.",
+    useCase: "É útil quando a aplicação precisa listar muita informação de forma legível e escaneável.",
+    code: `import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Nome</TableHead>
+      <TableHead>Cargo</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>Ana Souza</TableCell>
+      <TableCell>Front-end</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>`,
+  },
+  {
+    id: "select",
+    label: "Select",
+    eyebrow: "escolha controlada",
+    description: "Permite escolher uma opção dentro de listas pequenas ou médias com bom feedback visual.",
+    useCase: "Funciona bem para status, plano, categoria e qualquer campo de seleção única.",
+    code: `import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+<Select defaultValue="pro">
+  <SelectTrigger className="w-full">
+    <SelectValue placeholder="Selecione um plano" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="basic">Básico</SelectItem>
+    <SelectItem value="pro">Profissional</SelectItem>
+    <SelectItem value="enterprise">Enterprise</SelectItem>
+  </SelectContent>
+</Select>`,
+  },
+  {
+    id: "dropdown",
+    label: "Dropdown",
+    eyebrow: "menu contextual",
+    description: "Agrupa ações secundárias sem poluir a tela principal com muitos botões.",
+    useCase: "É muito usado em tabelas, cards de usuário e barras de ações com comandos extras.",
+    code: `import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+
+<DropdownMenu>
+  <DropdownMenuTrigger asChild>
+    <Button variant="outline">Ações</Button>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent align="end">
+    <DropdownMenuItem>Editar perfil</DropdownMenuItem>
+    <DropdownMenuItem>Duplicar acesso</DropdownMenuItem>
+    <DropdownMenuItem>Desativar conta</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>`,
+  },
+  {
+    id: "tabs",
+    label: "Tabs",
+    eyebrow: "troca de contexto",
+    description: "Separa áreas de conteúdo em seções rápidas sem sair da mesma tela.",
+    useCase: "É uma boa solução quando a página tem vários blocos relacionados, mas não cabe tudo ao mesmo tempo.",
+    code: `import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+<Tabs className="w-full" defaultValue="overview">
+  <TabsList className="grid w-full grid-cols-3">
+    <TabsTrigger value="overview">Visão geral</TabsTrigger>
+    <TabsTrigger value="reports">Relatórios</TabsTrigger>
+    <TabsTrigger value="team">Equipe</TabsTrigger>
+  </TabsList>
+  <TabsContent className="rounded-md border p-4 text-sm" value="overview">
+    Resumo geral da tela
+  </TabsContent>
+  <TabsContent className="rounded-md border p-4 text-sm" value="reports">
+    Indicadores e relatórios
+  </TabsContent>
+  <TabsContent className="rounded-md border p-4 text-sm" value="team">
+    Membros e permissões
+  </TabsContent>
+</Tabs>`,
+  },
+  {
+    id: "form",
+    label: "Form",
+    eyebrow: "validação",
+    description: "Combina campos, mensagens e validação em uma estrutura mais previsível.",
+    useCase: "Ajuda bastante quando a tela precisa de feedback claro para cadastro, edição e onboarding.",
+    code: `import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+<form className="space-y-4">
+  <div className="space-y-2">
+    <Label htmlFor="preview-email">E-mail</Label>
+    <Input id="preview-email" placeholder="voce@empresa.com" />
+  </div>
+  <div className="flex items-center gap-3">
+    <Checkbox id="preview-terms" />
+    <Label htmlFor="preview-terms">Aceito os termos</Label>
+  </div>
+  <Button className="w-full">Criar conta</Button>
+</form>`,
+  },
+  {
+    id: "toast",
+    label: "Toast / Sonner",
+    eyebrow: "feedback imediato",
+    description: "Exibe sucesso, erro e avisos curtos sem tirar o usuário do fluxo atual.",
+    useCase: "Ótimo para confirmar ações rápidas como salvar, copiar, excluir ou atualizar algo.",
+    code: `import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+
+<Button onClick={() => toast.success("Usuário salvo com sucesso")}>
+  Mostrar toast
+</Button>`,
+  },
+];
+
+const mainComponents = componentShowcases.map((item) => item.label);
 
 function CodeBlock({ className, code, copyText = code }) {
   async function handleCopy() {
@@ -313,7 +504,12 @@ function CodeBlock({ className, code, copyText = code }) {
         <span className="h-2.5 w-2.5 rounded-full bg-amber-200" />
         <span className="h-2.5 w-2.5 rounded-full bg-emerald-300" />
       </div>
-      <Button className="absolute right-4 top-3 h-9 rounded-full px-3" size="sm" variant="ghost" onClick={handleCopy}>
+      <Button
+        className="absolute right-4 top-3 h-9 rounded-full px-3 text-emerald-50 hover:bg-white/8 hover:text-emerald-50"
+        size="sm"
+        variant="ghost"
+        onClick={handleCopy}
+      >
         <Copy className="size-4" />
         Copiar
       </Button>
@@ -337,13 +533,175 @@ function SlideShell({ slide, children }) {
   );
 }
 
-export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, slide }) {
+function ComponentSnippetCard({ label, code }) {
+  return (
+    <div className="h-full overflow-hidden rounded-[24px] border border-white/10 bg-[#09120f] shadow-inner">
+      <div className="flex items-center justify-between gap-3 border-b border-white/10 px-5 py-4">
+        <div className="flex items-center gap-2">
+          <span className="h-2.5 w-2.5 rounded-full bg-rose-300" />
+          <span className="h-2.5 w-2.5 rounded-full bg-amber-200" />
+          <span className="h-2.5 w-2.5 rounded-full bg-emerald-300" />
+        </div>
+        <Badge className="bg-white/8 text-white" variant="outline">
+          {label}
+        </Badge>
+      </div>
+      <pre className="overflow-x-auto p-5 text-sm leading-7 text-emerald-50 md:text-[0.95rem]">
+        <code>{code}</code>
+      </pre>
+    </div>
+  );
+}
+
+function ComponentPreview({ showcaseId }) {
+  switch (showcaseId) {
+    case "button":
+      return (
+        <Button variant="outline">Ver detalhes</Button>
+      );
+    case "input":
+      return <Input placeholder="voce@empresa.com" type="email" />;
+    case "card":
+      return (
+        <Card className="w-full max-w-sm">
+          <CardHeader>
+            <CardTitle>Plano Pro</CardTitle>
+            <CardDescription>Mais usado em dashboards</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p>Inclui métricas, formulários e tabelas.</p>
+          </CardContent>
+        </Card>
+      );
+    case "dialog":
+      return (
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline">Abrir dialog</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Editar perfil</DialogTitle>
+              <DialogDescription>Atualize as informações e salve as alterações.</DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button>Salvar alterações</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      );
+    case "table":
+      return (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Nome</TableHead>
+              <TableHead>Cargo</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>Ana Souza</TableCell>
+              <TableCell>Front-end</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      );
+    case "select":
+      return (
+        <Select defaultValue="pro">
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Selecione um plano" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="basic">Básico</SelectItem>
+            <SelectItem value="pro">Profissional</SelectItem>
+            <SelectItem value="enterprise">Enterprise</SelectItem>
+          </SelectContent>
+        </Select>
+      );
+    case "dropdown":
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">Ações</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>Editar perfil</DropdownMenuItem>
+            <DropdownMenuItem>Duplicar acesso</DropdownMenuItem>
+            <DropdownMenuItem>Desativar conta</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    case "tabs":
+      return (
+        <Tabs className="w-full" defaultValue="overview">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="overview">Visão geral</TabsTrigger>
+            <TabsTrigger value="reports">Relatórios</TabsTrigger>
+            <TabsTrigger value="team">Equipe</TabsTrigger>
+          </TabsList>
+          <TabsContent value="overview" className="rounded-md border p-4 text-sm">
+            Resumo geral da tela
+          </TabsContent>
+          <TabsContent value="reports" className="rounded-md border p-4 text-sm">
+            Indicadores e relatórios
+          </TabsContent>
+          <TabsContent value="team" className="rounded-md border p-4 text-sm">
+            Membros e permissões
+          </TabsContent>
+        </Tabs>
+      );
+    case "form":
+      return (
+        <form className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="preview-email">E-mail</Label>
+            <Input id="preview-email" placeholder="voce@empresa.com" />
+          </div>
+          <div className="flex items-center gap-3">
+            <Checkbox id="preview-terms" />
+            <Label htmlFor="preview-terms">Aceito os termos</Label>
+          </div>
+          <Button className="w-full">Criar conta</Button>
+        </form>
+      );
+    case "toast":
+      return (
+        <Button onClick={() => toast.success("Usuário salvo com sucesso")}>Mostrar toast</Button>
+      );
+    default:
+      return null;
+  }
+}
+
+export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, case11VisibleCards = 0, slide }) {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginMessage, setLoginMessage] = useState("Demo funcional com o fluxo representado em React.");
   const [variant, setVariant] = useState("default");
   const [activeSetupCommand, setActiveSetupCommand] = useState(setupCommandCards[0].id);
+  const [componentsCarouselApi, setComponentsCarouselApi] = useState(null);
+  const [activeMainComponent, setActiveMainComponent] = useState(0);
 
   const activeSetupCard = setupCommandCards.find((item) => item.id === activeSetupCommand) ?? setupCommandCards[0];
+  const activeShowcase = componentShowcases[activeMainComponent] ?? componentShowcases[0];
+
+  useEffect(() => {
+    if (!componentsCarouselApi) return;
+
+    const syncSelectedSlide = () => {
+      setActiveMainComponent(componentsCarouselApi.selectedScrollSnap());
+    };
+
+    syncSelectedSlide();
+    componentsCarouselApi.on("select", syncSelectedSlide);
+    componentsCarouselApi.on("reInit", syncSelectedSlide);
+
+    return () => {
+      componentsCarouselApi.off("select", syncSelectedSlide);
+      componentsCarouselApi.off("reInit", syncSelectedSlide);
+    };
+  }, [componentsCarouselApi]);
 
   function runLoginDemo() {
     if (!loginEmail) {
@@ -400,7 +758,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                   Uma coleção de componentes para React muito usada com Next.js, Vite e Tailwind CSS.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-5 text-base leading-7 text-[var(--muted)] md:text-lg">
+              <CardContent className="space-y-5 text-base leading-7 text-[var(--muted-foreground)] md:text-lg">
                 <p>O ponto mais importante é que ele não funciona como uma biblioteca tradicional escondida no projeto.</p>
                 <p>Quando você adiciona um componente, o código entra na base da aplicação e passa a ser responsabilidade da equipe.</p>
                 <div className="rounded-[24px] border border-[var(--border)] bg-[var(--surface-2)] p-5 text-foreground">
@@ -449,21 +807,10 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                 Problema das interfaces repetitivas
               </CardTitle>
 
-              <CardDescription className="text-sm md:text-base">
-                Todo sistema repete os mesmos blocos de interface. O problema começa quando
-                cada tela recria esses blocos sem uma base comum.
-              </CardDescription>
+              <CardDescription className="text-sm md:text-base"></CardDescription>
             </CardHeader>
 
-            <CardContent className="space-y-5">
-              <div className="flex flex-wrap gap-2">
-                {repeatedInterfaceBlocks.map((item) => (
-                  <Badge key={item} variant="muted">
-                    {item}
-                  </Badge>
-                ))}
-              </div>
-
+            <CardContent className="space-y-5 h-full">
               <div className="grid gap-4 lg:grid-cols-[0.9fr_1fr_1fr]">
                 <FlipCard
                   back={
@@ -475,13 +822,13 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                         </CardDescription>
                       </CardHeader>
 
-                      <CardContent className="space-y-1.5 px-5 pb-4 text-[15px] leading-4">
+                      <CardContent className="space-y-1.5 px-3 pb-4 text-[30px] leading-10">
                         {manualComponentSteps.map((step, index) => (
                           <div
                             className="flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5"
                             key={step}
                           >
-                            <span className="grid size-4 shrink-0 place-items-center rounded-full bg-emerald-400 text-[10px] font-semibold text-emerald-950">
+                            <span className="grid size-4 shrink-0 place-items-center rounded-full bg-emerald-400 text-[10px] leading-none font-semibold text-emerald-950">
                               {index + 1}
                             </span>
                             <span>{step}</span>
@@ -490,7 +837,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                       </CardContent>
                     </Card>
                   }
-                  className="h-[330px]"
+                  className="h-[600px]"
                   flipped={case3VisibleCards >= 1}
                   front={
                     <Card className="grid h-full place-items-center overflow-hidden bg-[var(--surface-2)] p-5 text-center text-foreground shadow-none">
@@ -511,8 +858,8 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                         </CardDescription>
                       </CardHeader>
 
-                      <CardContent className="space-y-2 px-5 pb-5 text-xs leading-5">
-                        <div className="rounded-xl bg-rose-950/10 px-3 py-2 font-mono text-xs">
+                      <CardContent className="space-y-1.5 px-3 pb-4 text-[30px] leading-10">
+                        <div className="rounded-xl bg-rose-950/10 px-3 py-2 font-mono text-[30px]">
                           Button ≠ Button ≠ Button
                         </div>
 
@@ -523,14 +870,13 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                             </div>
                           ))}
                         </div>
-
-                        <p className="pt-1">
-                          A interface funciona, mas fica mais difícil evoluir sem quebrar padrão.
-                        </p>
                       </CardContent>
+                      <CardFooter className="pt-1 text-lg font-semibold">
+                        A interface funciona, mas fica mais difícil evoluir sem quebrar padrão.
+                      </CardFooter>
                     </Card>
                   }
-                  className="h-[330px]"
+                  className="h-[600px]"
                   flipped={case3VisibleCards >= 2}
                   front={
                     <Card className="grid h-full place-items-center overflow-hidden bg-rose-300/92 p-5 text-center text-rose-950 shadow-none">
@@ -551,8 +897,8 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                         </CardDescription>
                       </CardHeader>
 
-                      <CardContent className="space-y-2 px-5 pb-5 text-xs leading-5">
-                        <div className="rounded-xl bg-emerald-950/10 px-3 py-2 font-mono text-xs">
+                      <CardContent className="space-y-1.5 px-3 pb-4 text-[30px] leading-10">
+                        <div className="rounded-xl bg-emerald-950/10 px-3 py-2 font-mono text-[30px]">
                           npx shadcn@latest add button
                         </div>
 
@@ -563,14 +909,13 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                             </div>
                           ))}
                         </div>
-
-                        <p className="pt-1 font-semibold">
-                          Menos repetição. Mais padrão. Mais controle.
-                        </p>
                       </CardContent>
+                      <CardFooter className="text-lg font-semibold">
+                        Menos repetição. Mais padrão. Mais controle.
+                      </CardFooter>
                     </Card>
                   }
-                  className="h-[330px]"
+                  className="h-[600px]"
                   flipped={case3VisibleCards >= 3}
                   front={
                     <Card className="grid h-full place-items-center overflow-hidden bg-emerald-400/90 p-5 text-center text-emerald-950 shadow-none">
@@ -582,10 +927,9 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                 />
               </div>
 
-              <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface-2)] p-4 text-sm leading-6 text-[var(--muted)]">
+              <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface-2)] p-4 text-[20px] leading-6 text-[var(--muted-foreground)]">
                 <strong className="text-foreground">Ideia central:</strong>{" "}
-                o shadcn/ui não resolve a regra de negócio. Ele reduz o trabalho repetitivo
-                da interface, entregando uma base visual pronta para o desenvolvedor adaptar.
+                o shadcn/ui não resolve a regra de negócio. Ele reduz o trabalho repetitivo da interface, entregando uma base visual pronta para o desenvolvedor adaptar.
               </div>
             </CardContent>
           </Card>
@@ -611,7 +955,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                     <div className="grid size-10 shrink-0 place-items-center rounded-full bg-emerald-400 font-semibold text-emerald-950">
                       {index + 1}
                     </div>
-                    <p className="text-base leading-7 text-[var(--muted)] md:text-lg">{step}</p>
+                    <p className="text-base leading-7 text-[var(--muted-foreground)] md:text-lg">{step}</p>
                   </div>
                 ))}
               </CardContent>
@@ -627,14 +971,9 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
         <SlideShell slide={slide}>
           <Card>
             <CardHeader className="max-w-5xl pb-4">
-              <CardTitle className="text-3xl tracking-[-0.05em] md:text-4xl">
+              <CardTitle className="text-3xl tracking-[-0.05em] md:text-3xl">
                 Tecnologias usadas
               </CardTitle>
-
-              <CardDescription className="text-sm md:text-base">
-                O shadcn/ui combina várias ferramentas. Cada uma resolve uma parte da interface:
-                estrutura, estilo, acessibilidade, variantes e instalação.
-              </CardDescription>
             </CardHeader>
 
             <CardContent className="space-y-4">
@@ -647,23 +986,23 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                           <Card className="h-full overflow-hidden bg-[var(--surface-2)] shadow-none">
                             <CardHeader className="p-5 pb-3">
                               <div className="flex items-center justify-between gap-3">
-                                <CardTitle className="text-xl">{tech.name}</CardTitle>
+                                <CardTitle className="text-[20px]">{tech.name}</CardTitle>
                                 <Badge variant="muted">{tech.role}</Badge>
                               </div>
                             </CardHeader>
 
                             <CardContent className="space-y-3 px-5 pb-5">
-                              <p className="text-sm leading-6 text-[var(--muted)]">
+                              <p className="text-lg leading-7 text-[var(--muted-foreground)]">
                                 {tech.description}
                               </p>
 
-                              <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 font-mono text-xs text-[var(--muted)]">
+                              <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 font-mono text-xs text-[var(--muted-foreground)]">
                                 {tech.example}
                               </div>
                             </CardContent>
                           </Card>
                         }
-                        className="h-[250px]"
+                        className="h-[180px]"
                         flipped={case5VisibleStages >= tech.stage}
                         front={
                           <Card className="grid h-full place-items-center bg-[var(--surface-2)] p-5 text-center shadow-none">
@@ -687,7 +1026,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                           <CardTitle className="text-xl">Como as peças se encaixam</CardTitle>
                         </CardHeader>
 
-                        <CardContent className="space-y-3 px-5 pb-5 text-sm leading-6 text-[var(--muted)]">
+                        <CardContent className="space-y-3 px-5 pb-5 text-[20px] leading-6 text-[var(--muted-foreground)]">
                           {stackCompositionSteps.map((step) => (
                             <div className="rounded-xl bg-[var(--surface)] px-4 py-3" key={step}>
                               {step}
@@ -696,7 +1035,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                         </CardContent>
                       </Card>
                     }
-                    className="h-[320px]"
+                    className="h-[370px]"
                     flipped={case5VisibleStages >= 7}
                     front={
                       <Card className="grid h-full place-items-center bg-[var(--surface-2)] p-5 text-center shadow-none">
@@ -711,8 +1050,8 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                   />
 
                   <FlipCard
-                    back={<CodeBlock className="h-full" code={stackCompositionSnippet} />}
-                    className="h-[320px]"
+                    back={<CodeBlock className="h-full " code={stackCompositionSnippet} />}
+                    className="h-[370px]"
                     flipped={case5VisibleStages >= 7}
                     front={
                       <Card className="grid h-full place-items-center border-white/10 bg-[#09120f] p-5 text-center text-emerald-50 shadow-none">
@@ -751,7 +1090,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                   ["Shadcn/UI", "Copia o código para o projeto", "Alto"],
                 ].map(([name, model, control]) => (
                   <div
-                    className={`grid grid-cols-3 px-6 py-5 text-base ${name === "Shadcn/UI" ? "bg-emerald-400/90 font-semibold text-emerald-950" : "bg-[var(--surface)] text-[var(--muted)]"}`}
+                    className={`grid grid-cols-3 px-6 py-5 text-base ${name === "Shadcn/UI" ? "bg-emerald-400/90 font-semibold text-emerald-950" : "bg-[var(--surface)] text-[var(--muted-foreground)]"}`}
                     key={name}
                   >
                     <span className={name === "Shadcn/UI" ? "text-emerald-950" : "text-foreground"}>{name}</span>
@@ -760,7 +1099,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                   </div>
                 ))}
               </div>
-              <div className="rounded-[24px] border border-[var(--border)] bg-[var(--surface-2)] p-5 text-base leading-7 text-[var(--muted)] md:text-lg">
+              <div className="rounded-[24px] border border-[var(--border)] bg-[var(--surface-2)] p-5 text-base leading-7 text-[var(--muted-foreground)] md:text-lg">
                 No Bootstrap e no Material UI, o projeto consome uma biblioteca. No Shadcn, o projeto recebe o código do componente e pode alterar diretamente.
               </div>
             </CardContent>
@@ -775,9 +1114,6 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
               <Card>
                 <CardHeader>
                   <CardTitle className="text-4xl tracking-[-0.05em] md:text-5xl">Instalação e estrutura</CardTitle>
-                  <CardDescription className="text-base md:text-lg">
-                    Cada comando vira um passo da apresentação. Clique em um deles para trocar o painel lateral com a saída do console e o que entrou no projeto.
-                  </CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-3">
                   {setupCommandCards.map((item, index) => {
@@ -789,17 +1125,17 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                           "h-auto items-start justify-between rounded-[24px] border px-4 py-4 text-left transition-all md:px-5",
                           isActive
                             ? "border-emerald-300/35 bg-emerald-300/10 text-foreground shadow-[0_0_0_1px_rgba(110,231,183,0.18)]"
-                            : "border-[var(--border)] bg-[var(--surface-2)] text-[var(--muted)] hover:bg-[var(--surface)]",
+                            : "border-[var(--border)] bg-[var(--surface-2)] text-[var(--muted-foreground)] hover:bg-[var(--surface)]",
                         )}
                         key={item.id}
                         onClick={() => setActiveSetupCommand(item.id)}
                         variant="ghost"
                       >
                         <div className="grid gap-2">
-                          <span className="text-[0.68rem] uppercase tracking-[0.28em] text-emerald-300/80">Passo 0{index + 1}</span>
-                          <code className="font-mono text-sm text-current md:text-base">{item.command}</code>
+                          <span className="text-[0.80rem] uppercase tracking-[0.28em] text-current opacity-70">Passo 0{index + 1}</span>
+                          <code className="font-mono text-lg text-current md:text-[20px] font-bold ">{item.command}</code>
                         </div>
-                        <div className="flex items-center gap-2 pl-4 text-[0.68rem] uppercase tracking-[0.24em] text-emerald-100/70">
+                        <div className="flex items-center gap-2 pl-4 text-[0.68rem] uppercase tracking-[0.24em] text-current opacity-70">
                           <span>{isActive ? "ativo" : item.eyebrow}</span>
                           <ChevronRight className={cn("size-4 transition-transform", isActive && "translate-x-1")} />
                         </div>
@@ -808,26 +1144,10 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                   })}
                 </CardContent>
               </Card>
-              <Card className="bg-[var(--surface-2)] shadow-none">
-                <CardContent className="grid gap-3 p-6 text-sm leading-7 text-[var(--muted)] md:text-base">
-                  <p><strong>init</strong>: prepara a base para a CLI trabalhar no projeto.</p>
-                  <p><strong>add</strong>: copia arquivos reais para <code>src/components/ui</code>.</p>
-                  <p><strong>efeito visual</strong>: o card lateral muda conforme o comando selecionado.</p>
-                </CardContent>
-              </Card>
             </div>
             <Card className="overflow-hidden bg-[#09120f] text-emerald-50">
               <CardHeader className="border-b border-white/10 pb-6">
-                <div className="flex flex-wrap items-center gap-3">
-                  <Badge className="bg-emerald-300 text-emerald-950">{activeSetupCard.eyebrow}</Badge>
-                  <Badge className="border-white/15 bg-white/6 text-emerald-50" variant="outline">
-                    painel dinâmico
-                  </Badge>
-                </div>
-                <CardTitle className="text-3xl md:text-4xl">{activeSetupCard.title}</CardTitle>
-                <CardDescription className="max-w-2xl text-base leading-7 text-emerald-50/72 md:text-lg">
-                  {activeSetupCard.summary}
-                </CardDescription>
+                <CardTitle className="text-4xl md:text-3xl">{activeSetupCard.title}</CardTitle>
               </CardHeader>
               <CardContent className="grid gap-5 p-6">
                 <div className="overflow-hidden rounded-[24px] border border-white/10 bg-[#06100d]">
@@ -858,14 +1178,6 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                     </pre>
                   </div>
                 </div>
-                <div className="overflow-hidden rounded-[24px] border border-white/10 bg-[#06100d]">
-                  <div className="border-b border-white/10 px-5 py-3 text-[0.68rem] uppercase tracking-[0.28em] text-emerald-300">
-                    Exemplo rápido
-                  </div>
-                  <pre className="overflow-x-auto p-5 text-sm leading-7 text-emerald-50 md:text-[0.95rem]">
-                    <code>{activeSetupCard.example}</code>
-                  </pre>
-                </div>
               </CardContent>
             </Card>
           </div>
@@ -875,42 +1187,79 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
       return (
         <SlideShell slide={slide}>
           <Card>
-            <CardHeader>
-              <CardTitle className="text-4xl tracking-[-0.05em] md:text-5xl">Componentes principais</CardTitle>
-              <CardDescription className="text-base md:text-lg">
-                Eles cobrem boa parte das telas comuns de sistemas web, como login, dashboard, cadastro, listagem e formulário.
-              </CardDescription>
+            <CardHeader className="gap-5">
+              <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+                <div className="max-w-4xl space-y-2">
+                  <CardTitle className="text-4xl tracking-[-0.05em] md:text-5xl">Componentes principais</CardTitle>
+                </div>
+                <div className="rounded-full border border-[var(--border)] bg-[var(--surface-2)] px-4 py-2 text-sm font-medium text-[var(--muted-foreground)]">
+                  {String(activeMainComponent + 1).padStart(2, "0")} / {String(componentShowcases.length).padStart(2, "0")}
+                </div>
+              </div>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex flex-wrap gap-3">
-                {mainComponents.map((item) => (
-                  <Badge key={item} variant="outline">
+                {mainComponents.map((item, index) => (
+                  <button
+                    className={cn(
+                      "rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] transition-colors",
+                      index === activeMainComponent
+                        ? "border-transparent bg-emerald-400 text-emerald-950"
+                        : "border-[var(--border)] bg-transparent text-foreground hover:bg-[var(--surface-2)]",
+                    )}
+                    key={item}
+                    onClick={() => componentsCarouselApi?.scrollTo(index)}
+                    type="button"
+                  >
                     {item}
-                  </Badge>
+                  </button>
                 ))}
               </div>
-              <div className="grid gap-5 lg:grid-cols-2">
-                <Card className="bg-[var(--surface-2)] shadow-none">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-3 text-2xl">
-                      <LayoutDashboard className="size-5" />
-                      Demo de UI
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4 text-[var(--muted)]">
-                    <p>Esses componentes aparecem em praticamente qualquer sistema: da tela de login ao painel administrativo.</p>
-                    <Button onClick={() => toast.success("Toast exibido com sucesso")}>Mostrar toast</Button>
-                  </CardContent>
-                </Card>
-                <Card className="bg-[var(--surface-2)] shadow-none">
-                  <CardHeader>
-                    <CardTitle className="text-2xl">Vantagem prática</CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-[var(--muted)]">
-                    Você começa com uma base visual e funcional já organizada, em vez de repetir o mesmo trabalho em cada tela.
-                  </CardContent>
-                </Card>
-              </div>
+              <PresentationCarousel className="w-full" opts={{ align: "start" }} setApi={setComponentsCarouselApi}>
+                <PresentationCarouselContent>
+                  {componentShowcases.map((item, index) => (
+                    <PresentationCarouselItem key={item.id}>
+                      <div className="grid gap-5 xl:grid-cols-[0.96fr_1.04fr]">
+                        <ComponentSnippetCard code={item.code} label={item.label} />
+                        <Card className="h-full bg-[var(--surface-2)] shadow-none">
+                          <CardHeader className="gap-1 border-b border-[var(--border)]">
+                            <div className="flex flex-wrap items-start justify-between gap-4">
+                              <div className="space-y-2">
+                                <span className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-emerald-600">
+                                  {item.eyebrow}
+                                </span>
+                                <CardTitle className="text-2xl md:text-[2rem]">{item.label}</CardTitle>
+                              </div>
+                              <div className="rounded-full border border-[var(--border)] bg-background px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted-foreground)]">
+                                Face {String(index + 1).padStart(2, "0")}
+                              </div>
+                            </div>
+                            <CardDescription className="text-base leading-7">{item.description}</CardDescription>
+                          </CardHeader>
+                          <CardContent className="grid h-[50%] gap-5 p-6">
+                            <div className="rounded-[24px] border border-[var(--border)] bg-background p-4">
+                              <ComponentPreview showcaseId={item.id} />
+                            </div>
+                            <p className="text-sm leading-7 text-[var(--muted-foreground)]">{item.useCase}</p>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </PresentationCarouselItem>
+                  ))}
+                </PresentationCarouselContent>
+                <div className="mt-5 flex flex-col gap-4 border-t border-[var(--border)] pt-5 md:flex-row md:items-center md:justify-between">
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-foreground">{activeShowcase.label}</p>
+                    <p className="text-sm text-[var(--muted-foreground)]">
+                      Use os labels acima ou as setas para navegar pelos componentes básicos do ecossistema Shadcn.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <PresentationCarouselPrevious className="static left-auto top-auto translate-y-0" />
+                    <PresentationCarouselNext className="static right-auto top-auto translate-y-0" />
+                  </div>
+                </div>
+              </PresentationCarousel>
             </CardContent>
           </Card>
         </SlideShell>
@@ -939,10 +1288,10 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                     Secondary
                   </Button>
                 </div>
-                <div className="rounded-[24px] border border-[var(--border)] bg-[var(--surface-2)] p-5 text-base leading-7 text-[var(--muted)]">
+                <div className="rounded-[24px] border border-[var(--border)] bg-[var(--surface-2)] p-5 text-base leading-7 text-[var(--muted-foreground)]">
                   O botão selecionado representa a variante atual do componente: <strong className="text-foreground">{variant}</strong>
                 </div>
-                <div className="grid gap-2 text-[var(--muted)]">
+                <div className="grid gap-2 text-[var(--muted-foreground)]">
                   <p>Você pode mudar cor, tamanho, borda, variantes, classes Tailwind e comportamento visual.</p>
                   <p>Se o botão padrão do sistema mudar, basta ajustar <code>components/ui/button.tsx</code>.</p>
                 </div>
@@ -977,7 +1326,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                     Ideia: gerar dashboard
                   </Button>
                 </div>
-                <div className="grid gap-2 text-[var(--muted)]">
+                <div className="grid gap-2 text-[var(--muted-foreground)]">
                   <p>A IA pode ajudar a gerar telas rapidamente, montar protótipos, sugerir layouts e organizar componentes.</p>
                   <p>Ela acelera, mas não substitui revisão técnica.</p>
                 </div>
@@ -1005,7 +1354,7 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
                 <div className="rounded-[20px] border border-amber-300/30 bg-amber-200/60 p-4 text-amber-950">
                   <strong>Frase forte:</strong> IA acelera. O desenvolvedor valida.
                 </div>
-                <div className="rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-4 text-[var(--muted)]">
+                <div className="rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-4 text-[var(--muted-foreground)]">
                   Sem revisão, a IA só entrega um Frankenstein bonito em Tailwind.
                 </div>
               </CardContent>
@@ -1017,42 +1366,84 @@ export function SlideRenderer({ case3VisibleCards = 0, case5VisibleStages = 0, s
       return (
         <SlideShell slide={slide}>
           <Card>
-            <CardHeader>
-              <CardTitle className="text-4xl tracking-[-0.05em] md:text-5xl">Vantagens e limitações</CardTitle>
+            <CardHeader className="max-w-5xl pb-4">
+              <CardTitle className="text-3xl tracking-[-0.05em] md:text-4xl">Vantagens e limitações</CardTitle>
+              <CardDescription className="text-sm md:text-base">
+                O Shadcn acelera muito a construção da interface, mas cobra maturidade técnica da equipe para manter padrão e organização.
+              </CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-5 md:grid-cols-2">
-              <Card className="bg-emerald-400/90 text-emerald-950 shadow-none">
-                <CardHeader>
-                  <CardTitle>Vantagens</CardTitle>
-                </CardHeader>
-                <CardContent className="grid gap-3 text-base md:text-lg">
-                  {["rápido", "moderno", "bonito", "customizável", "acessível", "bom para design system", "funciona bem com IA"].map((item) => (
-                    <div className="flex items-center gap-3" key={item}>
-                      <Check className="size-5" />
-                      <span>{item}</span>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-              <Card className="bg-rose-300/92 text-rose-950 shadow-none">
-                <CardHeader>
-                  <CardTitle>Limitações</CardTitle>
-                </CardHeader>
-                <CardContent className="grid gap-3 text-base md:text-lg">
-                  {[
-                    "exige React",
-                    "exige Tailwind",
-                    "manutenção fica com a equipe",
-                    "pode virar bagunça sem padrão",
-                    "não é ideal para quem só quer copiar sem entender",
-                  ].map((item) => (
-                    <div className="flex items-center gap-3" key={item}>
-                      <ChevronRight className="size-5" />
-                      <span>{item}</span>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
+            <CardContent className="space-y-4">
+              <div className="grid gap-4 lg:grid-cols-2">
+                <FlipCard
+                  back={
+                    <Card className="h-full overflow-hidden bg-emerald-400/90 text-emerald-950 shadow-none">
+                      <CardHeader className="p-5 pb-3">
+                        <div className="flex items-center justify-between gap-3">
+                          <CardTitle className="text-xl">Vantagens</CardTitle>
+                          <Badge className="bg-emerald-950/10 text-emerald-950" variant="muted">
+                            pontos fortes
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="grid gap-2 px-5 pb-5 text-sm leading-5 md:text-[15px]">
+                        {slide11Advantages.map((item) => (
+                          <div className="flex items-start gap-3 rounded-xl bg-emerald-950/10 px-3 py-2" key={item}>
+                            <Check className="mt-0.5 size-4 shrink-0" />
+                            <span>{item}</span>
+                          </div>
+                        ))}
+                      </CardContent>
+                    </Card>
+                  }
+                  className="h-[500px]"
+                  flipped={case11VisibleCards >= 1}
+                  front={
+                    <Card className="grid h-full place-items-center overflow-hidden bg-emerald-400/90 p-5 text-center text-emerald-950 shadow-none">
+                      <div className="space-y-3">
+                        <Badge className="bg-emerald-950/10 text-emerald-950" variant="muted">
+                          pontos fortes
+                        </Badge>
+                        <CardTitle className="text-2xl tracking-[-0.04em] md:text-3xl">Vantagens</CardTitle>
+                      </div>
+                    </Card>
+                  }
+                />
+
+                <FlipCard
+                  back={
+                    <Card className="h-full overflow-hidden bg-rose-300/92 text-rose-950 shadow-none">
+                      <CardHeader className="p-5 pb-3">
+                        <div className="flex items-center justify-between gap-3">
+                          <CardTitle className="text-xl">Limitações</CardTitle>
+                          <Badge className="bg-rose-950/10 text-rose-950" variant="muted">
+                            trade-offs
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="grid gap-2 px-5 pb-5 text-sm leading-5 md:text-[15px]">
+                        {slide11Limitations.map((item) => (
+                          <div className="flex items-start gap-3 rounded-xl bg-rose-950/10 px-3 py-2" key={item}>
+                            <ChevronRight className="mt-0.5 size-4 shrink-0" />
+                            <span>{item}</span>
+                          </div>
+                        ))}
+                      </CardContent>
+                    </Card>
+                  }
+                  className="h-[500px]"
+                  flipped={case11VisibleCards >= 2}
+                  front={
+                    <Card className="grid h-full place-items-center overflow-hidden bg-rose-300/92 p-5 text-center text-rose-950 shadow-none">
+                      <div className="space-y-3">
+                        <Badge className="bg-rose-950/10 text-rose-950" variant="muted">
+                          trade-offs
+                        </Badge>
+                        <CardTitle className="text-2xl tracking-[-0.04em] md:text-3xl">Limitações</CardTitle>
+                      </div>
+                    </Card>
+                  }
+                />
+              </div>
             </CardContent>
           </Card>
         </SlideShell>
